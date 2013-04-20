@@ -1,89 +1,66 @@
-# Game Design Document
-This is a place holder for your game design document. You are advised to write your document in [Markdown](http://daringfireball.net/projects/markdown/) and the following section will show you how to write a document using Markdown markup.
+# A Game of Chicken
+##Overview
+This game will be a top-down game that will be modeled after the classic game of chicken as is often used to model brinkmanship.
+The basic premise of the game is quite simple: there are two cars. the two start a set distance away from each other on a relatively straight road. The driver of each car accelerates toward the other. The first person to swerve is called the chicken and has lost the game.
+The challenge of the game is to decide whether or not you think the other driver will swerve as you get closer.
 
-Alternativley, you can write your document in plain text if you wish.
+**Landcape**
+![alt text](http://github.com/usc-spring2013-csci102/Images/Landscape.png "Landscape")
 
-----
+##The Cars/Basic Gameplay
+###Introduction
+There will be two cars. One car will be controlled by the user and the other will be controlled by the computer. The user will be able to select his or her style of car from the options displayed below. The computer's car will be selected randomly from the cars not selected by the user.
 
-## Markdown
-Markdown is a human-readable structured plain text format that is used to convert text into HTML. GitHub automatically renders Markdown into HTML.
+**Possible Cars:**
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car1.png "Car 1")
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car2.png "Car 2")
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car3.png "Car 3")
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car4.png "Car 4")
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car5.png "Car 5")
 
-This is a crash course on how to use Markdown. The following section will show you the plain text used to generate the document shown in the rendering section.
+###Controls
+The user will have three controls:
+	*Accellerate: this will increase the speed of the user controlled car progressively.
+	*Swerve: This will make the card swerve off the road to avoid a collision with the other vehicle
+	*Throw out the steering wheel: This signals to the computer player that the user has no way of swerving to avoid the collission. This was a common strategy used by the original players of chicken to indicate they are completely commited to continuing forward. This action will alter the computer's strategy as described below.
 
-### Code
+###Collisions
+A collision will occur if neither the computer nor the user decides to swerve. A collision will result in points and the loss of one life. Each player will have three lives. The method for determining scoring is described in detail in the **Scoring** section.
 
-```
-# Header 1
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
+###Computer Strategies
+The computer will select from the following strategies:
+	*Randomly decide whether or not it is going to swerve
+	*75% chance it will swerve
+	*25% chance it will swerve
+	*Throw out the steering wheel (indicates it definitely won't swerve)
+	*100% swerve: it definitely won't swerve, but does not signal its intent to the user
+	*Fake swerve: looks like it's going to swerve, but changes its mind
+If the computer decides to swerve, it will swerve at different distances from the user's car so the user cannot predict at what point the computer will swerve if it does.
 
-You can also write in **bold** or _italics_. You can also ~~strike through~~ or write inline `Code Segments`
+###Steering Wheel
+As described above, either player will have the ability to throw out the steering wheel. The possible steering wheels are listed below:
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/SW1.png "Steering Wheel 1")
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/SW2.png "Steering Wheel 2")
 
->Blockquotes are done as such.
+##Interfering Objects/Twists
+The game will include two objects that will interfere randomly.
 
-Just make sure to separate paragraphs with an emptyline. 
-Otherwise, they are considered in the same paragraph.
+###Falling Rocks
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/Boulder.png "Boulder")
+The boulder will roll down the hill. If the player accelerates normally (continually holds the acceleration key), the boulder will collide with the user's car and result in the loss of one life.
 
-You link to [Google](https://www.google.com) as such and lists are written has follows:
-  1. First you indent with two empty spaces.
-  1. Then, you use:
-    * `1.` to signal an ordered (i.e. numbered) list, or
-    * `*`, `-`, `+` to represent an unordered list.
-      1. Make sure to maintain indentation
-      1. As it is used to identify sub-lists
-  1. Numbering and symboles don't matter as they are auto-generated later.
+###Tumbleweed
+![alt text](http://github.com/usc-spring2013-csci102/game_jacobtuc/Images/TumbleWeed.png "Tumbleweed")
+The tumbleweed will also appear randomly, and if the user fails to avoid it, it will blind the user (all visuals will disappear so the user will in effect be driving blind).
 
-Tables are pretty easy to make:
+##Scoring
+The player will begin with 100 points. If his or her points fall to zero, they have lost the game. The following will result in increases or loss of points:
+	*Collision with the computer controlled car: -25
+	*Swerve: -15
+	*Win (Don't swerve and computer does swerve): +50
 
-| Tables        | Are           | Easy          |
-| ------------- |:-------------:| -------------:|
-| left-aligned  | centered      | right-aligned |
-| header are    | bolded and    | centered      |
-| zebra stripes | are neat      | 1             |
-
-
-Images are added inline by using the following syntax
-![alt text](http://octodex.github.com/images/Professortocat_v2.png "Image Title")
-```
-
-----
-
-### Rendering
-This section shows the rendering of the plain text above.
-
-# Header 1
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
-
-You can also write in **bold** or _italics_. You can also ~~strike through~~ or write inline `Code Segments`
-
->Blockquotes are done as such.
-
-Just make sure to separate paragraphs with an emptyline. 
-Otherwise, they are considered in the same paragraph.
-
-You link to [Google](https://www.google.com) as such and lists are written has follows:
-  1. First you indent with two empty spaces.
-  1. Then, you use:
-    * `1.` to signal an ordered (i.e. numbered) list, or
-    * `*`, `-`, `+` to represent an unordered list.
-      1. Make sure to maintain indentation
-      1. As it is used to identify sub-lists
-  1. Numbering and symboles don't matter as they are auto-generated later.
-
-Tables are pretty easy to make:
-
-| Tables        | Are           | Easy          |
-| ------------- |:-------------:| -------------:|
-| left-aligned  | centered      | right-aligned |
-| header are    | bolded and    | centered      |
-| zebra stripes | are neat      | 1             |
-
-
-Images are added inline by using the following syntax
-![alt text](http://octodex.github.com/images/Professortocat_v2.png "Image Title")
+1 life will be lost for the following:
+	*Collission with the boulder
+	*Both the computer and the player swerves
+	*Collission between the two cars
 
