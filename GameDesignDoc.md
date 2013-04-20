@@ -5,18 +5,18 @@ The basic premise of the game is quite simple: there are two cars. the two start
 The challenge of the game is to decide whether or not you think the other driver will swerve as you get closer.
 
 ####Landcape
-![alt text](https://raw.github.com/usc-spring2013-csci102/Images/Landscape.png "Landscape")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/Images/Landscape.png "Landscape")
 
 ##The Cars/Basic Gameplay
 ###Introduction
 There will be two cars. One car will be controlled by the user and the other will be controlled by the computer. The user will be able to select his or her style of car from the options displayed below. The computer's car will be selected randomly from the cars not selected by the user.
 
 ####Possible Cars:
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car1.png "Car 1")
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car2.png "Car 2")
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car3.png "Car 3")
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car4.png "Car 4")
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car5.png "Car 5")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car1.png "Car 1")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car2.png "Car 2")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car3.png "Car 3")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car4.png "Car 4")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car5.png "Car 5")
 
 ###Controls
 The user will have three controls:
@@ -39,18 +39,18 @@ If the computer decides to swerve, it will swerve at different distances from th
 
 ###Steering Wheel
 As described above, either player will have the ability to throw out the steering wheel. The possible steering wheels are listed below:
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/SW1.png "Steering Wheel 1")
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/SW2.png "Steering Wheel 2")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/SW1.png "Steering Wheel 1")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/SW2.png "Steering Wheel 2")
 
 ##Interfering Objects/Twists
 The game will include two objects that will interfere randomly.
 
 ###Falling Rocks
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Boulder.png "Boulder")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Boulder.png "Boulder")
 The boulder will roll down the hill. If the player accelerates normally (continually holds the acceleration key), the boulder will collide with the user's car and result in the loss of one life.
 
 ###Tumbleweed
-![alt text](https://raw.github.com/usc-spring2013-csci102/game_jacobtuc/Images/TumbleWeed.png "Tumbleweed")
+![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/TumbleWeed.png "Tumbleweed")
 The tumbleweed will also appear randomly, and if the user fails to avoid it, it will blind the user (all visuals will disappear so the user will in effect be driving blind).
 
 ##Scoring
