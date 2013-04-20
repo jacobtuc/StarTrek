@@ -5,7 +5,7 @@ The basic premise of the game is quite simple: there are two cars. the two start
 The challenge of the game is to decide whether or not you think the other driver will swerve as you get closer.
 
 ####Landcape
-![alt text](http://octodex.github.com/usc-spring2013-csci102/Images/Landscape.png "Landscape")
+![alt text](http://jacobtuc.github.com/usc-spring2013-csci102/Images/Landscape.png "Landscape")
 
 ##The Cars/Basic Gameplay
 ###Introduction
