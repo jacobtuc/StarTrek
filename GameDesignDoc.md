@@ -5,14 +5,14 @@ The basic premise of the game is quite simple: there are two cars. the two start
 The challenge of the game is to decide whether or not you think the other driver will swerve as you get closer.
 
 ####Landcape
-![alt text](http://jacobtuc.github.com/usc-spring2013-csci102/Images/Landscape.png "Landscape")
+![alt text](Images/Landscape.png "Landscape")
 
 ##The Cars/Basic Gameplay
 ###Introduction
 There will be two cars. One car will be controlled by the user and the other will be controlled by the computer. The user will be able to select his or her style of car from the options displayed below. The computer's car will be selected randomly from the cars not selected by the user.
 
 ####Possible Cars:
-![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car1.png "Car 1")
+![alt text](Images/Car1.png "Car 1")
 ![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car2.png "Car 2")
 ![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car3.png "Car 3")
 ![alt text](http://octodex.github.com/usc-spring2013-csci102/game_jacobtuc/Images/Car4.png "Car 4")
