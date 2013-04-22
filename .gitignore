@@ -11,3 +11,10 @@
 *.lai
 *.la
 *.a
+
+#Other files
+game_jacobtuc
+game_jacobtuc.pro
+moc_FirstWindowWidget.cpp
+moc_MainWindow.cpp
+Makefile
