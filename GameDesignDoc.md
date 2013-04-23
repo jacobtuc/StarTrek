@@ -8,7 +8,7 @@ The challenge of the game is to decide whether or not you think the other driver
 ![alt text](Images/Landscape.png "Landscape")
 
 ## Interface
-The first screen will ask for the user's name and include a next button. The next button will take the user to another screen where they can select which car (see Possible Cars) they want to use. When the click on the car, gameplay will begin as described below.
+The first screen will ask for the user's name to be entered in a line edit and include a next button. The next button will take the user to another screen where they can select which car (see Possible Cars) they want to use. When the click on the car, gameplay will begin as described below.
 
 The menu bar will include a number of options including pause, stop, and new game buttons. These will be contained in drop-down menues in the menu bar.
 
