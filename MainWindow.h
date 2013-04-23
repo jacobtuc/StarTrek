@@ -8,10 +8,17 @@
 #include <QApplication>
 #include <QMenu>
 #include <QMenuBar>
+#include <QPixmap>
 
 #include "FirstWindowWidget.h"
+#include "SelectCar.h"
+
+#define NUM_CARS 4
+#define NUM_POLICE_CARS 2
+#define NUM_STEERING_WHEELS 2
 
 class FirstWindow;
+class SelectCar;
 
 /**The main window of the application.
    This will contain all widgets for game play and everything to do with main gameplay. */
@@ -29,9 +36,30 @@ public:
      @post first_ is deleted and the second menu is created and displayed
   */
   void selectCar();
+  /**Returns the array of pointers to car images.
+     @param size A reference variable for the integer where you want the size of the array to be stored */
+  QPixmap** getCars(int& size);
+  /**Returns the array of pointers to steering wheel images.
+     @param size A reference variable for the integer where you want the size of the array to be stored.*/
+  QPixmap** getSteeringWheels(int& size);
+  /**Returns the array of pointers to the police car images
+     @param size A reference variable for the integer where you want the size of the array to be stored.*/
+  QPixmap** getPoliceCars(int& size);
+  /**Returns a pointer to the tumbleweed picture.*/
+  QPixmap* getTumbleweed();
+  /**Returns a pointer to the boulder picture.*/
+  QPixmap* getBoulder();
+  /**Returns a pointer to the landscape picture.*/
+  QPixmap* getLandscape();
+  /**This funtion is called from the SelectCar widget to indicate which car should be selected
+     @param car The pixmap of the car to be the user's car. This should be a member of the cars array.
+     @post car will be set as the user's car and the gameplay will begin
+  */
+  void selectCar(QPixmap* car);
 
 private:
   FirstWindow* first_;
+  SelectCar* second_;
   QApplication* parent_;
   
   //Menus
@@ -40,6 +68,14 @@ private:
 
   //User data
   QString name;
+
+  //Pictures
+  QPixmap* cars_[NUM_CARS];
+  QPixmap* police_cars_[NUM_POLICE_CARS];
+  QPixmap* steering_wheels_[NUM_STEERING_WHEELS];
+  QPixmap* tumbleweed_;
+  QPixmap* boulder_;
+  QPixmap* landscape_;
 
 public slots:
   void newGame();
