@@ -9,8 +9,8 @@ SelectCar::SelectCar(QString name, MainWindow* parent)
   setScene(scene_);
   
   // Create the text
-  QString labelString("Choose your vehicle!");
-  QGraphicsTextItem* label_ = new QGraphicsTextItem(labelString);
+  QString labelText = "Choose your vehicle, " + name + "!";
+  QGraphicsTextItem* label_ = new QGraphicsTextItem(labelText);
   QFont theFont("Helvetica [Cronyx]",35,QFont::Bold);
   label_->setFont(theFont);
   scene_->addItem(label_);

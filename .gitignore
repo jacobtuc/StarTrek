@@ -18,3 +18,4 @@ game_jacobtuc.pro
 moc_FirstWindowWidget.cpp
 moc_MainWindow.cpp
 Makefile
+mov_SelectCar.cpp

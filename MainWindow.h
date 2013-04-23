@@ -76,6 +76,7 @@ private:
   QPixmap* tumbleweed_;
   QPixmap* boulder_;
   QPixmap* landscape_;
+  QPixmap* playersCar_;
 
 public slots:
   void newGame();
