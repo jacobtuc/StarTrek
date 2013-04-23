@@ -39,8 +39,10 @@ SelectCar::SelectCar(QString name, MainWindow* parent)
     scene_->addItem(carViews_[n]);
   }
   
+  if (currentHeight == labelSize.height()+10)
+    currentHeight = currentHeight + carHeight;
   // Set the size of the view
-  setFixedSize(labelSize.width(), currentHeight);
+  setFixedSize(labelSize.width()+15, currentHeight+15);
 }
 
 SelectCar::~SelectCar()
