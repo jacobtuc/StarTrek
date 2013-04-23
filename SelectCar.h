@@ -5,6 +5,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
+#include <QRectF>
 
 #include "MainWindow.h"
 #include "car_select.h"
