@@ -12,6 +12,7 @@
 
 #include "FirstWindowWidget.h"
 #include "SelectCar.h"
+#include "gameplay_window.h"
 
 #define NUM_CARS 4
 #define NUM_POLICE_CARS 2
@@ -19,6 +20,7 @@
 
 class FirstWindow;
 class SelectCar;
+class GameplayWindow;
 
 /**The main window of the application.
    This will contain all widgets for game play and everything to do with main gameplay. */
@@ -51,6 +53,10 @@ public:
   QPixmap* getBoulder();
   /**Returns a pointer to the landscape picture.*/
   QPixmap* getLandscape();
+  /**Returns the car that the player has selected to use
+     @pre The SelectCar window must have been created and the user must have selected a car.
+  */
+  QPixmap* getPlayersCar();
   /**This funtion is called from the SelectCar widget to indicate which car should be selected
      @param car The pixmap of the car to be the user's car. This should be a member of the cars array.
      @post car will be set as the user's car and the gameplay will begin
@@ -60,6 +66,7 @@ public:
 private:
   FirstWindow* first_;
   SelectCar* second_;
+  GameplayWindow* gameplay_;
   QApplication* parent_;
   
   //Menus

@@ -43,9 +43,9 @@ MainWindow::MainWindow(QApplication* parent)
   }
   
   // Load the boulder, tumbleweed, and landscape.
-  tumbleweed_ = new QPixmap("Img_Tumbleweed.png");
-  boulder_ = new QPixmap("Img_Boulder.png");
-  landscape_ = new QPixmap("Landscape.png");
+  tumbleweed_ = new QPixmap("Images/Img_Tumbleweed.png");
+  boulder_ = new QPixmap("Images/Img_Boulder.png");
+  landscape_ = new QPixmap("Images/Landscape.png");
   
   //We start the program by displaying the first window (hence why it's called first window)
   first_ = new FirstWindow(this);
@@ -107,7 +107,14 @@ QPixmap* MainWindow::getLandscape()
   return landscape_;
 }
 
+QPixmap* MainWindow::getPlayersCar()
+{
+  return playersCar_;
+}
+
 void MainWindow::selectCar(QPixmap* car)
 {
-  std::cout << "The car has been selected" << std::endl;
+  playersCar_ = car;
+  gameplay_ = new GameplayWindow(this);
+  setCentralWidget(gameplay_);
 }
