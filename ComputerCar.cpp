@@ -14,7 +14,7 @@ enum {RANDOM,S75,S25,THROWSW,S100,FAKE};
 
 ComputerCar::ComputerCar(QPixmap* mp, int nx, int ny, int ph, GameplayWindow* parent) : Thing(mp, nx, ny)
 {
-  defSwerve = true;
+  defSwerve = false;
   parent_ = parent;
   fakeCount = 0;
 
@@ -53,6 +53,7 @@ void ComputerCar::move()
     vY = vY+aY;
   }
   
+  //For testing purposes
   if (defSwerve && counter_ == swerveLoc+10) {
     rotate(270);
     aX = 1;
