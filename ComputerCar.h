@@ -30,6 +30,7 @@ class ComputerCar : public Thing {
   int swerveLoc;
   bool fakeCount;
   bool defSwerve;
+  bool swerve;
 };
 
 #endif

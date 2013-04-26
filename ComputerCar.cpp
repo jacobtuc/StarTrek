@@ -15,6 +15,7 @@ enum {RANDOM,S75,S25,THROWSW,S100,FAKE};
 ComputerCar::ComputerCar(QPixmap* mp, int nx, int ny, int ph, GameplayWindow* parent) : Thing(mp, nx, ny)
 {
   defSwerve = false;
+  swerve = false;
   parent_ = parent;
   fakeCount = 0;
 
@@ -42,7 +43,7 @@ void ComputerCar::move()
     aY = 0;
     vY = 0;
   }
-  if (counter_ > swerveLoc + 30) {
+  if (swerve && counter_ > swerveLoc + 30) {
     vX = 0;
     vY = 0;
     aX = 0;
@@ -64,6 +65,7 @@ void ComputerCar::move()
     rotate(270);
     aX = 1;
     aY = -10;
+    swerve = true;
   } else if (strat == RANDOM && counter_ == swerveLoc+10) {
     srand( time(NULL) );
     int decide = rand() % 2;
@@ -71,6 +73,7 @@ void ComputerCar::move()
       rotate(270);
       aX = 1;
       aY = -10;
+      swerve = true;
     }
   } else if (strat == S75 && counter_ == swerveLoc) {
     srand( time(NULL) );
@@ -79,6 +82,7 @@ void ComputerCar::move()
       rotate(270);
       aX = 1;
       aY = -10;
+      swerve = true;
     }
   } else if (strat == S25 && counter_ == swerveLoc) {
     srand( time(NULL) );
@@ -87,6 +91,7 @@ void ComputerCar::move()
       rotate(270);
       aX = 1;
       aY = -10;
+      swerve = true;
     }
   } else if (strat == THROWSW && counter_ == swerveLoc) {
     parent_->computerThrowWheel();
