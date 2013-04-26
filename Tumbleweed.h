@@ -11,10 +11,18 @@ class Tumbleweed : public Thing {
    * @param ph The height of the player's car. This is used to calculate accelleration so the car and the tumbleweed will collide if the player continues to accellerate. */
   Tumbleweed(QPixmap* mp, int nx, int ny, int pw, int ph);
   void move();
+  /**This MUST be called by the function that starts the movement of the player's car. It will only start the movement of the tumbleweed if the tumbleweed decided to move in the constructur.*/
+  void toggleMoving();
+  /**This allows the user to force the tumbleweed to move for testing purposes
+   * @param s The value you wish to set definite movement to be (true if you want the tumbleweed to move).
+   */
+  void setShouldMove(bool s);
 
  private:
   int aX;
   int aY;
   bool moving;
+  bool shouldMove;
+  bool defMove;
 };
 #endif
