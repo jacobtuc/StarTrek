@@ -3,7 +3,7 @@
 
 #include "thing.h"
 
-/**The boulder that will randomly begin rolling down the hill to hit the player's car if they do not slow down.*/
+/**The boulder that will randomly begin rolling down the hill to hit the player's car if they do not slow down. There is a 10% chance that the boulder will decide to move unless the value is manually set by the user (for testing purposes).*/
 class Boulder : public Thing {
  public:
   /**Default constructor. All parameters are the same as the default thing constructor except the following exceptions:
