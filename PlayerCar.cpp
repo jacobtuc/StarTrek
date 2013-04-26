@@ -5,12 +5,15 @@ PlayerCar::PlayerCar(QPixmap* mp, int nx, int ny) : Thing(mp, nx, ny)
   aX = 0;
   aY = 0;
   swerve_ = false;
+  throwWheel_ = false;
   counter = 0;
 }
 
+
+
 void PlayerCar::incrementAccel()
 {
-  if (swerve_)
+  if (swerve_ || throwWheel_)
     return;
   if (aY <= -1) {
     aY = -1;
@@ -30,13 +33,21 @@ void PlayerCar::swerve()
 
 void PlayerCar::decrementAccel()
 {
-  if (swerve_)
+  if (swerve_ || throwWheel_)
     return;
   if (aY >= 2) {
     aY = 2;
     return;
   }
   aY = aY + 1;
+}
+
+void PlayerCar::throwWheel()
+{
+  aX = 0;
+  aY = 2;
+  vX = 0;
+  throwWheel_ = true;
 }
 
 void PlayerCar::move()

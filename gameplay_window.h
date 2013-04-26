@@ -42,6 +42,15 @@ class GameplayWindow : public QGraphicsView {
    * @post A steering wheel is created and its velocity set to be thrown out of the car.
    */
   void computerThrowWheel();
+  /**This function is called from the MainWindow to indicate the up arrow was pressed. This increases the acceleration of the player's car by 1 until it reaches its maximum (+1)*/
+  void upArrow();
+  /**This function is called from the MainWindow to indicate that the down arrow was pressed. This decreases the acceleration of the player's car by 1 until it reaches its maximum (-2)*/
+  void downArrow();
+  /**This function is called from the MainWindow to indicate that the left arrow was pressed. This will make the player's car swerve.*/
+  void leftArrow();
+  /**This function is called from the MainWindow to indicate that the space bar was pressed. This will throw the player's steering wheel out and remove the ability to swerve.*/
+  void spaceBar();
+  
 
  private:
   MainWindow* parent_;

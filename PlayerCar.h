@@ -17,12 +17,15 @@ class PlayerCar : public Thing {
   void decrementAccel();
   /**Makes the car swerve.*/
   void swerve();
+  /**Throws out the steering wheel. All this function really does is sets the acceleration to be 2 in the y direction and 0 in the x direction. It also locks out the increment and decrement functions*/
+  void throwWheel();
 
  private:
   int aX;
   int aY;
   int counter;
   bool swerve_;
+  bool throwWheel_;
 };
 
 #endif

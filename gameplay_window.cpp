@@ -97,3 +97,23 @@ void GameplayWindow::handleTimer()
     (*it)->move();
   }
 }
+
+void GameplayWindow::upArrow()
+{
+  players_car_->incrementAccel();
+}
+
+void GameplayWindow::downArrow()
+{
+  players_car_->decrementAccel();
+}
+
+void GameplayWindow::leftArrow()
+{
+  players_car_->swerve();
+}
+
+void GameplayWindow::spaceBar()
+{
+  players_car_->throwWheel();
+}
