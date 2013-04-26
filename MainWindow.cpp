@@ -3,6 +3,7 @@
 
 MainWindow::MainWindow(QApplication* parent)
 {
+  setFocus();
   parent_ = parent;
   
   // Create the menu bar
@@ -117,4 +118,24 @@ void MainWindow::selectCar(QPixmap* car)
   playersCar_ = car;
   gameplay_ = new GameplayWindow(this);
   setCentralWidget(gameplay_);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* e)
+{
+  switch (e->key()) {
+  case Qt::Key_Right:
+    gameplay_->leftArrow();
+    break;
+  case Qt::Key_Up:
+    gameplay_->upArrow();
+    break;
+  case Qt::Key_Down:
+    gameplay_->downArrow();
+    break;
+  case Qt::Key_Space:
+    gameplay_->spaceBar();
+    break;
+  default:
+    break;
+  }
 }

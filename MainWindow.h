@@ -9,6 +9,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QPixmap>
+#include <QKeyEvent>
 
 #include "FirstWindowWidget.h"
 #include "SelectCar.h"
@@ -84,6 +85,9 @@ private:
   QPixmap* boulder_;
   QPixmap* landscape_;
   QPixmap* playersCar_;
+
+ protected:
+  void keyPressEvent(QKeyEvent* e);
 
 public slots:
   void newGame();

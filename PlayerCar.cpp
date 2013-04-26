@@ -25,7 +25,7 @@ void PlayerCar::incrementAccel()
 void PlayerCar::swerve()
 {
   rotate(90);
-  aX = 1;
+  aX = 10;
   aY = -5;
   swerve_ = true;
   counter = 0;
