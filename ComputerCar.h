@@ -10,6 +10,9 @@ class GameplayWindow;
 
 class ComputerCar : public Thing {
  public:
+  /**Default constructor. Everythign is the same as the Thing constructor except the following:
+   * @param ph The height of the player's car. This is necessary to calculate swerve locations.
+   * @param parent The GameplayWindow that owns the object. This is neccessary for the steering wheel function. */
   ComputerCar(QPixmap* mp, int nx, int ny, int ph, GameplayWindow* parent);
   void move();
   /**Sets the definite swerve variable. This is meant for testing purposes to demonstrate the swervability of the computer car.
