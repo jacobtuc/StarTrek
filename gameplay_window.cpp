@@ -115,5 +115,16 @@ void GameplayWindow::leftArrow()
 
 void GameplayWindow::spaceBar()
 {
+  // Create the wheel and have it move
+  int swSize;
+  QPixmap** sws = parent_->getSteeringWheels(swSize);
+  srand( time(NULL) );
+  int selection = rand() % swSize;
+  SteeringWheel* theWheel = new SteeringWheel(sws[selection],players_car_->pos().x(),players_car_->pos().y(),players_car_->getVelocityY());
+  scene_->addItem(theWheel);
+  things_.push_back(theWheel);
+  
+  // Set the acceleration and velocity of the players car
+  // Also locks control of the car.
   players_car_->throwWheel();
 }
