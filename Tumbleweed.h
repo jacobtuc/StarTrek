@@ -3,7 +3,7 @@
 
 #include "thing.h"
 
-/**This is the tumbleweed that will block the player's view if it hits them.*/
+/**This is the tumbleweed that will block the player's view if it hits them. The class decides on its own whether it's going to move. There is a 10% chance of it moving on any given round.*/
 class Tumbleweed : public Thing {
  public:
   /**Default construct. All parameters are identical to the Thing constructor except for the listed exceptions.

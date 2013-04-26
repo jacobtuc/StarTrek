@@ -42,6 +42,12 @@ void ComputerCar::move()
     aY = 0;
     vY = 0;
   }
+  if (counter_ > swerveLoc + 30) {
+    vX = 0;
+    vY = 0;
+    aX = 0;
+    aY = 0;
+  }
   if (counter_ == 10) {
     accel = true;
     aX = 0;
