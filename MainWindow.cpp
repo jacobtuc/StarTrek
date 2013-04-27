@@ -182,7 +182,7 @@ void MainWindow::updateLives(int lives)
 
 void MainWindow::toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer)
 {
-  
+  gameplay_->toggleAdminTools(boulder,tumbleweed,policeCar,computer);
 }
 
 void MainWindow::pauseGame()

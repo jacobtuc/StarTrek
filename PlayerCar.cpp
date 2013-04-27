@@ -47,7 +47,7 @@ void PlayerCar::decrementAccel()
 void PlayerCar::throwWheel()
 {
   aX = 0;
-  aY = 2;
+  aY = -2;
   vX = 0;
   throwWheel_ = true;
 }

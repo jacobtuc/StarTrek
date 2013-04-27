@@ -114,6 +114,9 @@ void GameplayWindow::handleTimer()
 void GameplayWindow::upArrow()
 {
   players_car_->incrementAccel();
+  boulder_->toggleMoving();
+  tumbleweed_->toggleMoving();
+  police_car_->toggleMoving();
 }
 
 void GameplayWindow::downArrow()
@@ -286,4 +289,13 @@ void GameplayWindow::newRound()
 void GameplayWindow::setPaused(bool s)
 {
   paused_ = s;
+}
+
+void GameplayWindow::toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer)
+{
+  boulder_->setShouldMove(boulder);
+  tumbleweed_->setShouldMove(tumbleweed);
+  police_car_->setShouldMove(policeCar);
+  computers_car_->setDefSwerve(computer);
+  parent_->setFocus();
 }

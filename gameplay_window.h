@@ -70,6 +70,8 @@ class GameplayWindow : public QGraphicsView {
   /**This function is used to pause or restart the game.
    * @param s The value that paused should be set to. This should be true to pause the game and false to restart the game.*/
   void setPaused(bool s);
+  /**This function sets the admin variables in the given objects. It should be called from the MainWindow, which is passing these values up from the Right Dock Widget. These functions are used for grading purposes only so the movement of the boulder and tumbleweed can be observed even though they don't appear that often.*/
+  void toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer);
 
 
  private:
