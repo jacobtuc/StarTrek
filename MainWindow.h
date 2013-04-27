@@ -10,10 +10,12 @@
 #include <QMenuBar>
 #include <QPixmap>
 #include <QKeyEvent>
+#include <QDockWidget>
 
 #include "FirstWindowWidget.h"
 #include "SelectCar.h"
 #include "gameplay_window.h"
+#include "ScoreDoc.h"
 
 #define NUM_CARS 4
 #define NUM_POLICE_CARS 2
@@ -77,6 +79,8 @@ private:
   SelectCar* second_;
   GameplayWindow* gameplay_;
   QApplication* parent_;
+  ScoreDoc* scoreDock_;
+  QDockWidget* topDock_;
   
   //Menus
   QMenu* file_;

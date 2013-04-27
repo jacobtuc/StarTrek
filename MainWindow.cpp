@@ -112,6 +112,12 @@ void MainWindow::selectCar(QPixmap* car)
   playersCar_ = car;
   gameplay_ = new GameplayWindow(this);
   setCentralWidget(gameplay_);
+  scoreDock_ = new ScoreDoc(name);
+  topDock_ = new QDockWidget(tr("Scoreboard"),this);
+  topDock_->setFloating(false);
+  topDock_->setAllowedAreas(Qt::TopDockWidgetArea);
+  topDock_->setWidget(scoreDock_);
+  addDockWidget(Qt::TopDockWidgetArea, topDock_);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* e)
@@ -142,10 +148,10 @@ void MainWindow::newGame()
 
 void MainWindow::updateScore(int score)
 {
-  
+  scoreDock_->setScore(score);
 }
 
 void MainWindow::updateLives(int lives)
 {
-  
+  scoreDock_->setLives(lives);
 }
