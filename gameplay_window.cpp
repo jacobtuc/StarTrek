@@ -96,6 +96,7 @@ void GameplayWindow::handleTimer()
     return;
   if (starting_) {
     int timerInt = timer_->interval() - 12;
+    // The timer interval can never be negative
     if (timerInt < 1)
       timerInt = 1;
     timer_->setInterval(timerInt);
