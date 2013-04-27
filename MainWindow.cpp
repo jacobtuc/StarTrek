@@ -5,6 +5,7 @@ MainWindow::MainWindow(QApplication* parent)
 {
   setFocus();
   parent_ = parent;
+  gameplay_ = NULL;
   
   // Create the menu bar
   QMenuBar* mb = menuBar();
@@ -17,7 +18,15 @@ MainWindow::MainWindow(QApplication* parent)
   QAction* quit = new QAction("Quit", file_);
   connect(quit,SIGNAL(triggered()),parent_,SLOT(quit()));
   file_->addAction(quit);
+  paused = false;
+  pause_ = new QAction("Pause", file_);
+  connect(pause_,SIGNAL(triggered()),this,SLOT(pauseGame()));
+  file_->addAction(pause_);
   mb->addMenu(file_);
+  
+  // View
+  view_ = new QMenu("View");
+  mb->addMenu(view_);
 
   // Load the car images
   for (int n = 1; n < NUM_CARS+1; n++)
@@ -51,6 +60,23 @@ MainWindow::MainWindow(QApplication* parent)
   //We start the program by displaying the first window (hence why it's called first window)
   first_ = new FirstWindow(this);
   setCentralWidget(first_);
+  
+  // We'll create the docks, but they'll be hidden
+  scoreDock_ = new ScoreDoc(name);
+  topDock_ = new QDockWidget(tr("Scoreboard"),this);
+  topDock_->setFloating(false);
+  topDock_->setAllowedAreas(Qt::TopDockWidgetArea);
+  topDock_->setWidget(scoreDock_);
+  topDock_->hide();
+  addDockWidget(Qt::TopDockWidgetArea, topDock_);
+  adminDock_ = new AdminDock(this);
+  rightDock_ = new QDockWidget(tr("Grading Tools"),this);
+  rightDock_->setFloating(false);
+  rightDock_->setAllowedAreas(Qt::RightDockWidgetArea);
+  rightDock_->setWidget(adminDock_);
+  addDockWidget(Qt::RightDockWidgetArea,rightDock_);
+  view_->addAction(rightDock_->toggleViewAction());
+  rightDock_->hide();
 }
 
 MainWindow::~MainWindow()
@@ -63,6 +89,8 @@ void MainWindow::selectCar()
   name = first_->getName();
   second_ = new SelectCar(name,this);
   setCentralWidget(second_);
+  scoreDock_->setName(name);
+  topDock_->show();
   show();
 }
 
@@ -111,13 +139,9 @@ void MainWindow::selectCar(QPixmap* car)
 {
   playersCar_ = car;
   gameplay_ = new GameplayWindow(this);
+  paused = false;
+  pause_->setText("Pause");
   setCentralWidget(gameplay_);
-  scoreDock_ = new ScoreDoc(name);
-  topDock_ = new QDockWidget(tr("Scoreboard"),this);
-  topDock_->setFloating(false);
-  topDock_->setAllowedAreas(Qt::TopDockWidgetArea);
-  topDock_->setWidget(scoreDock_);
-  addDockWidget(Qt::TopDockWidgetArea, topDock_);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* e)
@@ -154,4 +178,24 @@ void MainWindow::updateScore(int score)
 void MainWindow::updateLives(int lives)
 {
   scoreDock_->setLives(lives);
+}
+
+void MainWindow::toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer)
+{
+  
+}
+
+void MainWindow::pauseGame()
+{
+  if (gameplay_ == NULL)
+    return;
+  if (paused) {
+    paused = false;
+    gameplay_->setPaused(false);
+    pause_->setText("Pause");
+    return;
+  }
+  paused = true;
+  gameplay_->setPaused(true);
+  pause_->setText("Resume");
 }

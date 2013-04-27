@@ -16,11 +16,13 @@
 #include "SelectCar.h"
 #include "gameplay_window.h"
 #include "ScoreDoc.h"
+#include "AdminDock.h"
 
 #define NUM_CARS 4
 #define NUM_POLICE_CARS 2
 #define NUM_STEERING_WHEELS 2
 
+class AdminDock;
 class FirstWindow;
 class SelectCar;
 class GameplayWindow;
@@ -73,6 +75,8 @@ public:
    * @param lives The new number of lives to be sent to the top dock widget. Note that this is not a change in number of lives, but is the total number of lives at that point in the game.
    */
   void updateLives(int lives);
+  /**This sets the admin variables that are false by default. These are to be called from the AdminDock and allow the user to force certain events to happen.*/
+  void toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer);
 
 private:
   FirstWindow* first_;
@@ -81,6 +85,10 @@ private:
   QApplication* parent_;
   ScoreDoc* scoreDock_;
   QDockWidget* topDock_;
+  QDockWidget* rightDock_;
+  AdminDock* adminDock_;
+  QAction* pause_;
+  bool paused;
   
   //Menus
   QMenu* file_;
@@ -105,6 +113,8 @@ public slots:
   /**Creates a new game.
    * @post The game is taken back to the screen to select a car and the program restarts from there.The score and lives are reset as well as the condition of the pieces and the timer.*/
   void newGame();
+  /**Pauses the game by calling the pase function in the gameplay window.*/
+  void pauseGame();
 };
 
 #endif

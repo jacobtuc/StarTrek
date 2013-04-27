@@ -29,3 +29,8 @@ void ScoreDoc::setLives(int lives)
 {
   lives_->setText(QString::number(lives));
 }
+
+void ScoreDoc::setName(QString name)
+{
+  name_->setText(name);
+}

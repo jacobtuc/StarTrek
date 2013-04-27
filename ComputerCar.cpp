@@ -60,9 +60,11 @@ void ComputerCar::move()
     vY = vY+aY;
   }
   
-  //For testing purposes
+  //This first one is for testing purposes
   if (defSwerve && counter_ == swerveLoc+10) {
     rotate(270);
+    QRectF myRect = boundingRect();
+    setPos(pos().x()+myRect.height(),pos().y());
     aX = 1;
     aY = -10;
     swerve = true;
@@ -71,6 +73,8 @@ void ComputerCar::move()
     int decide = rand() % 2;
     if (decide == 0) {
       rotate(270);
+      QRectF myRect = boundingRect();
+      setPos(pos().x()+myRect.height(),pos().y());
       aX = 1;
       aY = -10;
       swerve = true;
@@ -80,6 +84,8 @@ void ComputerCar::move()
     int decide = rand() % 4;
     if (decide == 0 || decide == 1 || decide == 2) {
       rotate(270);
+      QRectF myRect = boundingRect();
+      setPos(pos().x()+myRect.height(),pos().y());
       aX = 1;
       aY = -10;
       swerve = true;
@@ -89,6 +95,8 @@ void ComputerCar::move()
     int decide = rand() % 4;
     if (decide == 1) {
       rotate(270);
+      QRectF myRect = boundingRect();
+      setPos(pos().x()+myRect.height(),pos().y());
       aX = 1;
       aY = -10;
       swerve = true;

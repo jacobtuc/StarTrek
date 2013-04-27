@@ -7,6 +7,7 @@ GameplayWindow::GameplayWindow(MainWindow* parent)
 {
   parent_ = parent;
   paused_ = false;
+  parent_->setFocus();
   
   // The player starts with three lives and a score of 100.
   lives_ = 3;
