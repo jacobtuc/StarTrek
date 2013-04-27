@@ -25,6 +25,8 @@ void PlayerCar::incrementAccel()
 void PlayerCar::swerve()
 {
   rotate(90);
+  QRectF myRect = boundingRect();
+  setPos(pos().x()+myRect.height(),pos().y());
   aX = 10;
   aY = -5;
   swerve_ = true;
@@ -69,3 +71,4 @@ void PlayerCar::move()
   setPos(pos().x()+vX,pos().y()+vY);
   counter++;
 }
+

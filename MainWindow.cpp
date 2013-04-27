@@ -66,12 +66,6 @@ void MainWindow::selectCar()
   show();
 }
 
-void MainWindow::newGame()
-{
-  first_ = new FirstWindow(this);
-  setCentralWidget(first_);
-}
-
 /**********************
 IMAGE GETTERS
 **********************/
@@ -138,4 +132,20 @@ void MainWindow::keyPressEvent(QKeyEvent* e)
   default:
     break;
   }
+}
+
+void MainWindow::newGame()
+{
+  second_ = new SelectCar(name,this);
+  setCentralWidget(second_);
+}
+
+void MainWindow::updateScore(int score)
+{
+  
+}
+
+void MainWindow::updateLives(int lives)
+{
+  
 }

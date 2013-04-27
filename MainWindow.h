@@ -63,6 +63,14 @@ public:
      @post car will be set as the user's car and the gameplay will begin
   */
   void selectCar(QPixmap* car);
+  /**This function updates the player's score in the top dock widget.
+   * @param score The new score to be sent to the top dock widget. Note that this is not a change in score, but is the total score at that point in the game.
+   */
+  void updateScore(int score);
+  /**This function updates the player's number of lives in the top dock widget.
+   * @param lives The new number of lives to be sent to the top dock widget. Note that this is not a change in number of lives, but is the total number of lives at that point in the game.
+   */
+  void updateLives(int lives);
 
 private:
   FirstWindow* first_;
@@ -90,6 +98,8 @@ private:
   void keyPressEvent(QKeyEvent* e);
 
 public slots:
+  /**Creates a new game.
+   * @post The game is taken back to the screen to select a car and the program restarts from there.The score and lives are reset as well as the condition of the pieces and the timer.*/
   void newGame();
 };
 
