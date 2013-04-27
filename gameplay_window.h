@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <vector>
+#include <QPoint>
 
 #include "MainWindow.h"
 #include "PlayerCar.h"
@@ -95,6 +96,7 @@ class GameplayWindow : public QGraphicsView {
   //Timer
   bool starting_;
   bool paused_;
+  int counter;
 
  public slots:
   void handleTimer();

@@ -19,7 +19,7 @@ PoliceCar::PoliceCar(QPixmap* mp, int nx, int ny) : Thing(mp, nx, ny)
   if (decision == 3)
     shouldMove = true;
   // Set the accellerations
-  aY = 1;
+  aY = -1;
   aX = 0;
 }
 
@@ -35,15 +35,16 @@ void PoliceCar::setShouldMove(bool s)
   shouldMove = s;
 }
 
-void PoliceCar::swerve()
+void PoliceCar::swerve(int t)
 {
   //TODO: Add code to make the police car end up at the same location as the player's car
+  
 }
 
 void PoliceCar::move()
 {
   // We want to let the player's car get a head start.
-  if (moving && counter > 10) {
+  if (moving && counter > 5) {
     vX = vX + aX;
     vY = vY + aY;
   }

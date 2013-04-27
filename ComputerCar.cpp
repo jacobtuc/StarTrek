@@ -33,7 +33,7 @@ ComputerCar::ComputerCar(QPixmap* mp, int nx, int ny, int ph, GameplayWindow* pa
   strat = strategies[selection];
   
   // Pick a swerve location
-  swerveLoc = rand() % static_cast<int>(sqrt((744-ph-mp->height())/2));
+  swerveLoc = rand() % static_cast<int>(2*sqrt((744-ph-mp->height())/2));
   swerveLoc = swerveLoc + 10;
 }
 

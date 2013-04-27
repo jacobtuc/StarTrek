@@ -8,6 +8,7 @@ GameplayWindow::GameplayWindow(MainWindow* parent)
   parent_ = parent;
   paused_ = false;
   parent_->setFocus();
+  counter = 0;
   
   // The player starts with three lives and a score of 100.
   lives_ = 3;
@@ -109,6 +110,7 @@ void GameplayWindow::handleTimer()
     (*it)->move();
   }
   checkCollisions();
+  counter++;
 }
 
 void GameplayWindow::upArrow()
@@ -117,6 +119,7 @@ void GameplayWindow::upArrow()
   boulder_->toggleMoving();
   tumbleweed_->toggleMoving();
   police_car_->toggleMoving();
+  counter = 0;
 }
 
 void GameplayWindow::downArrow()
@@ -128,6 +131,7 @@ void GameplayWindow::leftArrow()
 {
   players_car_->swerve();
   changeScore(-15);
+  police_car_->swerve(counter);
 }
 
 void GameplayWindow::spaceBar()
@@ -228,6 +232,7 @@ void GameplayWindow::newRound()
     scene_->removeItem(*it);
   }
   things_.clear();
+  counter = 0;
   /*
   for (int n = 0; n < tSize; n++) {
     if (things_[n] == NULL)
@@ -277,7 +282,7 @@ void GameplayWindow::newRound()
   int pcSize;
   QPixmap** pcs = parent_->getPoliceCars(pcSize);
   int pcSelec = rand() % pcSize;
-  police_car_ = new PoliceCar(pcs[pcSelec],landscape_->width()/2,landscape_->height()+2);
+  police_car_ = new PoliceCar(pcs[pcSelec],landscape_->width()/2,landscape_->height()+5);
   scene_->addItem(police_car_);
   things_.push_back(police_car_);
   
