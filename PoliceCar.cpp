@@ -1,10 +1,13 @@
 #include "PoliceCar.h"
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
+#include <math.h>
 
 PoliceCar::PoliceCar(QPixmap* mp, int nx, int ny) : Thing(mp, nx, ny)
 {
   computerSide = false;
+  moving = false;
   if (ny == 0) {
     rotate(180);
     computerSide = true;
@@ -35,10 +38,12 @@ void PoliceCar::setShouldMove(bool s)
   shouldMove = s;
 }
 
-void PoliceCar::swerve(int t)
+void PoliceCar::swerve(int y1, int x1)
 {
-  //TODO: Add code to make the police car end up at the same location as the player's car
-  
+  rotate(25);
+  const int t = 10;
+  aY = (2*(y1-(vY*t)-pos().y()))/(t*t);
+  aX = (2*(x1-pos().x()))/(t*t);
 }
 
 void PoliceCar::move()
@@ -48,6 +53,12 @@ void PoliceCar::move()
     vX = vX + aX;
     vY = vY + aY;
   }
+  //std::cout << "(" << vX << "," << vY << ")" << std::endl;
   setPos(pos().x() + vX, pos().y() + vY);
   counter++;
+}
+
+bool PoliceCar::is_moving()
+{
+  return moving;
 }

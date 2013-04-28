@@ -11,7 +11,7 @@ Boulder::Boulder(QPixmap* mp, int nx, int ny, int playerHeight) : Thing(mp, nx, 
   if (decision == 5)
     shouldMove = true;
   aY = 0;
-  aX = (512.5-mp->width())/(384.5-(mp->height()/2)-playerHeight);
+  aX = (512.5-mp->width()+50)/(384.5-(mp->height()/2)-playerHeight);
 }
 
 void Boulder::setShouldMove(bool s)

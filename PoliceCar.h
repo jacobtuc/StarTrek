@@ -16,9 +16,12 @@ class PoliceCar : public Thing {
    * @param s Set this as true if you definitely want the police car to show up. Set this to false if you changed your mind.*/
   void setShouldMove(bool s);
   /**This should be called from the function that makes the player's car swerve. This tells the police car to follow it so they collide.
-   * @param t The number of timer ticks since the player's car and the police car started moving.
+   * @param yInt The Y position of the player's car when it swerved
+   * @param x1 The x position where the players car will stop moving.
    */
-  void swerve(int t);
+  void swerve(int y1, int x1);
+  /**Returns true if the police cr is moving. False otherwise.*/
+  bool is_moving();
 
  private:
   // Means that this is the police car on the side the computer car starts from

@@ -8,7 +8,7 @@ AdminDock::AdminDock(MainWindow* parent)
   boulder_ = new QCheckBox("Force Boulder");
   connect(boulder_,SIGNAL(clicked()),this,SLOT(toggleCheckBoxes()));
   tumbleweed_ = new QCheckBox("Force Tumbleweed");
-  connect(boulder_,SIGNAL(clicked()),this,SLOT(toggleCheckBoxes()));
+  connect(tumbleweed_,SIGNAL(clicked()),this,SLOT(toggleCheckBoxes()));
   police_car_ = new QCheckBox("Force Police Car");
   connect(police_car_,SIGNAL(clicked()),this,SLOT(toggleCheckBoxes()));
   computer_ = new QCheckBox("Force Computer to Swerve");

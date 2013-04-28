@@ -77,6 +77,8 @@ public:
   void updateLives(int lives);
   /**This sets the admin variables that are false by default. These are to be called from the AdminDock and allow the user to force certain events to happen.*/
   void toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer);
+  /**This updates the check box information. It calls the toggle function in the admin dock which in turn calls the functions to set moving values in the gameplay window.*/
+  void checkCheckBoxes();
 
 private:
   FirstWindow* first_;
@@ -89,6 +91,7 @@ private:
   AdminDock* adminDock_;
   QAction* pause_;
   bool paused;
+  bool gameplay_running;
   
   //Menus
   QMenu* file_;

@@ -21,6 +21,8 @@ class PlayerCar : public Thing {
   void swerve();
   /**Throws out the steering wheel. All this function really does is sets the acceleration to be 2 in the y direction and 0 in the x direction. It also locks out the increment and decrement functions*/
   void throwWheel();
+  /**This should be called to indicate to the car that it should not move. The controlls are also locked out and it is impossible to accellerate in any direction.*/
+  void stop_moving();
   
 
  private:
@@ -29,6 +31,7 @@ class PlayerCar : public Thing {
   int counter;
   bool swerve_;
   bool throwWheel_;
+  bool allStop_;
 };
 
 #endif

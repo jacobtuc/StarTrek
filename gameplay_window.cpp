@@ -9,6 +9,7 @@ GameplayWindow::GameplayWindow(MainWindow* parent)
   paused_ = false;
   parent_->setFocus();
   counter = 0;
+  newGameCalled = false;
   
   // The player starts with three lives and a score of 100.
   lives_ = 3;
@@ -43,7 +44,7 @@ GameplayWindow::GameplayWindow(MainWindow* parent)
   things_.push_back(computers_car_);
   
   // Create the boulder
-  boulder_ = new Boulder(parent_->getBoulder(),0,(landscape_->height()/2)-parent_->getBoulder()->height()/2, parent_->getPlayersCar()->height());
+  boulder_ = new Boulder(parent_->getBoulder(),0,(landscape_->height()/2)-parent_->getBoulder()->height()/2+100, parent_->getPlayersCar()->height());
   scene_->addItem(boulder_);
   things_.push_back(boulder_);
   
@@ -65,6 +66,7 @@ GameplayWindow::GameplayWindow(MainWindow* parent)
   timer_ = new QTimer(this);
   timer_->setInterval(100);
   connect(timer_, SIGNAL(timeout()), this, SLOT(handleTimer()));
+  parent_->checkCheckBoxes();
   timer_->start();
 }
 
@@ -131,7 +133,7 @@ void GameplayWindow::leftArrow()
 {
   players_car_->swerve();
   changeScore(-15);
-  police_car_->swerve(counter);
+  police_car_->swerve(players_car_->pos().y(),(1025-parent_->getTumbleweed()->width()-20));
 }
 
 void GameplayWindow::spaceBar()
@@ -191,6 +193,10 @@ void GameplayWindow::checkCollisions()
     changeScore(50);
     newRound();
   } else if (players_car_->pos().x() > (1025-parent_->getTumbleweed()->width()-20)) {
+    if (police_car_->is_moving()) {
+      players_car_->stop_moving();
+      return;
+    }
     QMessageBox failMsg;
     failMsg.setText("CHICKEN!");
     failMsg.exec();
@@ -217,6 +223,9 @@ void GameplayWindow::loseLife()
 
 void GameplayWindow::loseGame()
 {
+  if (newGameCalled)
+    return;
+  newGameCalled = true;
   QMessageBox loseMsg;
   loseMsg.setText("GAME OVER! YOU LOST!");
   loseMsg.exec();
@@ -269,7 +278,7 @@ void GameplayWindow::newRound()
   things_.push_back(computers_car_);
   
   // Create the boulder
-  boulder_ = new Boulder(parent_->getBoulder(),0,(landscape_->height()/2)-parent_->getBoulder()->height()/2, parent_->getPlayersCar()->height());
+  boulder_ = new Boulder(parent_->getBoulder(),0,(landscape_->height()/2)-parent_->getBoulder()->height()/2+100, parent_->getPlayersCar()->height());
   scene_->addItem(boulder_);
   things_.push_back(boulder_);
   
@@ -285,6 +294,8 @@ void GameplayWindow::newRound()
   police_car_ = new PoliceCar(pcs[pcSelec],landscape_->width()/2,landscape_->height()+5);
   scene_->addItem(police_car_);
   things_.push_back(police_car_);
+  
+  parent_->checkCheckBoxes();
   
   starting_ = true;
   parent_->setFocus();

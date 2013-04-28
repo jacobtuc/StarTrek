@@ -80,6 +80,7 @@ class GameplayWindow : public QGraphicsView {
   QGraphicsScene* scene_;
   QPixmap* landscape_;
   QTimer* timer_;
+  bool newGameCalled;
   
   // Things
   std::vector<Thing*> things_;

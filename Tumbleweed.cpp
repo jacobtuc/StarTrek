@@ -7,7 +7,7 @@ Tumbleweed::Tumbleweed(QPixmap* mp, int nx, int ny, int pw, int ph) : Thing(mp, 
   moving = false;
   shouldMove = false;
   defMove = false;
-  srand( time(NULL) );
+  srand( time(NULL) - 10000);
   int decision = rand() % 10;
   if (decision == 5)
     shouldMove = true;

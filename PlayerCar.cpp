@@ -6,6 +6,7 @@ PlayerCar::PlayerCar(QPixmap* mp, int nx, int ny) : Thing(mp, nx, ny)
   aY = 0;
   swerve_ = false;
   throwWheel_ = false;
+  allStop_ = false;
   counter = 0;
 }
 
@@ -54,6 +55,13 @@ void PlayerCar::throwWheel()
 
 void PlayerCar::move()
 {
+  if (allStop_) {
+    aX = 0;
+    aY = 0;
+    vX = 0;
+    vY = 0;
+    return;
+  }
   if (swerve_) {
     if (vY <= 0) {
       aY = 0;
@@ -72,3 +80,11 @@ void PlayerCar::move()
   counter++;
 }
 
+void PlayerCar::stop_moving()
+{
+  aX = 0;
+  aY = 0;
+  vX = 0;
+  vY = 0;
+  allStop_ = 0;
+}

@@ -6,6 +6,7 @@ MainWindow::MainWindow(QApplication* parent)
   setFocus();
   parent_ = parent;
   gameplay_ = NULL;
+  gameplay_running = false;
   
   // Create the menu bar
   QMenuBar* mb = menuBar();
@@ -141,6 +142,7 @@ void MainWindow::selectCar(QPixmap* car)
   gameplay_ = new GameplayWindow(this);
   paused = false;
   pause_->setText("Pause");
+  gameplay_running = true;
   setCentralWidget(gameplay_);
 }
 
@@ -166,6 +168,7 @@ void MainWindow::keyPressEvent(QKeyEvent* e)
 
 void MainWindow::newGame()
 {
+  gameplay_running = false;
   second_ = new SelectCar(name,this);
   setCentralWidget(second_);
 }
@@ -180,8 +183,15 @@ void MainWindow::updateLives(int lives)
   scoreDock_->setLives(lives);
 }
 
+void MainWindow::checkCheckBoxes()
+{
+  adminDock_->toggleCheckBoxes();
+}
+
 void MainWindow::toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer)
 {
+  if (!gameplay_running)
+    return;
   gameplay_->toggleAdminTools(boulder,tumbleweed,policeCar,computer);
 }
 
