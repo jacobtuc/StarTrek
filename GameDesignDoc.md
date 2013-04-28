@@ -28,8 +28,8 @@ There will be two cars. One car will be controlled by the user and the other wil
 ###Controls
 The user will have three controls:
 * Accelerate: this will increase the speed of the user controlled car progressively. This will be the up arrow.
-* Swerve: This will make the card swerve off the road to avoid a collision with the other vehicle. This will be the space bar.
-* Throw out the steering wheel: This signals to the computer player that the user has no way of swerving to avoid the collission. This was a common strategy used by the original players of chicken to indicate they are completely commited to continuing forward. This action will alter the computer's strategy as described below. This will be the *x* key.
+* Swerve: This will make the card swerve off the road to avoid a collision with the other vehicle. This will be the right arrow.
+* Throw out the steering wheel: This signals to the computer player that the user has no way of swerving to avoid the collission. This was a common strategy used by the original players of chicken to indicate they are completely commited to continuing forward. This will be the space bar.
 
 ###Collisions
 A collision will occur if neither the computer nor the user decides to swerve. A collision will result in points and the loss of one life. Each player will have three lives. The method for determining scoring is described in detail in the **Scoring** section.
