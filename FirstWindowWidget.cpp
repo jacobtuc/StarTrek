@@ -6,7 +6,7 @@ FirstWindow::FirstWindow(MainWindow* parent)
   layout_ = new QFormLayout(this);
   name_ = new QLineEdit();
   layout_->addRow("Your Name:",name_);
-  QPushButton* next = new QPushButton("Next");
+  QPushButton* next = new QPushButton("Start Game");
   connect(next, SIGNAL(clicked()), this, SLOT(next()));
   layout_->addRow(next);
 }
