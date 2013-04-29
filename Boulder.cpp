@@ -7,7 +7,7 @@ Boulder::Boulder(QPixmap* mp, int nx, int ny, int playerHeight) : Thing(mp, nx, 
   moving = false;
   shouldMove = false;
   srand( time(NULL) );
-  int decision = rand() % 10;
+  int decision = rand() % 6;
   if (decision == 5)
     shouldMove = true;
   aY = 0;
