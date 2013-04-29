@@ -8,9 +8,15 @@ The challenge of the game is to decide whether or not you think the other driver
 ![alt text](Images/Landscape.png "Landscape")
 
 ## Interface
-The first screen will ask for the user's name to be entered in a line edit and include a next button. The next button will take the user to another screen where they can select which car (see Possible Cars) they want to use. When the click on the car, gameplay will begin as described below.
+The first screen will ask for the user's name to be entered in a line edit and include a next button. The next button will take the user to another screen where they can select which car (see Possible Cars) they want to use. When the click on the car, gameplay will begin as described below. Selecting the car functions as a "start button" from this point in the interface because it seemed more natural than making the user select start from the start button.
 
-The menu bar will include a number of options including pause, stop, and new game buttons. These will be contained in drop-down menues in the menu bar.
+There are 4 buttons in the menu bar:
+* File Menu
+	* New Game: creates a new game with the same username. The score is reset and the user is asked to select a new car.
+	* Pause: all components of the game are paused.
+	* Quit: quits the entire application
+* View Menu
+	* Grading Tools: This shows a menu in the right dock area that allows the grader to forcer certain objects to move for demonstration purposes. The grader can force the boulder to move, the tumbleweed to move, the police car to appear, or the computer car to swerve.
 
 During gameplay, the user's score will be displayed next to his or her name above the landscape in the window.
 
