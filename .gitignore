@@ -19,3 +19,10 @@ moc_FirstWindowWidget.cpp
 moc_MainWindow.cpp
 Makefile
 moc_SelectCar.cpp
+html/
+latex/
+config.txt
+AdminDock.cpp~
+moc_AdminDock.cpp
+moc_ScoreDoc.cpp
+moc_gameplay_window.cpp
