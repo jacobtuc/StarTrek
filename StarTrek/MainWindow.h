@@ -9,14 +9,17 @@
 #include <QAction>
 #include <QPixmap>
 #include <QString>
+#include <QDockWidget>
 
 #define NUM_FLEET 9
 #define NUM_ASTEROIDS 3
 
 #include "GameplayWindow.h"
 #include "NameWidget.h"
+#include "ScoreDoc.h"
 class GameplayWindow;
 class NameWidget;
+class LevelOne;
 
 /**This is the main window for the application. It will
 * always be shown and the central widget changed for new stuff.
@@ -75,6 +78,8 @@ private:
 
     // We have to keep track of what is currently being displayed
     GameplayWindow* currentWindow_;
+    // We also need to know about the score dock
+    ScoreDoc* scoreDock_;
 
     // Pixmaps
     QPixmap* enterprise_;
@@ -92,6 +97,11 @@ private:
 
     // Name window
     NameWidget* nameWin_;
+
+    // User data
+    QString username_;
+    int level_;
+    int score_;
 
 protected:
     /**This is the function that gets called by qt when a key is pressed.

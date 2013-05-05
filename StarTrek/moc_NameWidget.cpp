@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'NameWidget.h'
 **
-** Created: Sat May 4 17:00:25 2013
+** Created: Sun May 5 15:19:42 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

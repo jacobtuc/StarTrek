@@ -4,6 +4,8 @@ MainWindow::MainWindow(QApplication* parent)
 {
     // The current window should be null because there isn't a level yet
     currentWindow_ = NULL;
+    level_ = 0;
+    score_ = 0;
 
     // Start by creating the menus
     // File
@@ -23,9 +25,9 @@ MainWindow::MainWindow(QApplication* parent)
     romulan_ = new QPixmap("Images/RomulanWarbird.png");
     greenPhaser_ = new QPixmap("Images/Phaser_Green.png");
     redPhaser_ = new QPixmap("Images/Phaser_Red.png");
-    level1_ = new QPixmap("Images/Background_level_1.png");
-    level2_ = new QPixmap("Images/Background_level_2.png");
-    level3_ = new QPixmap("Images/Background_level_3.png");
+    level1_ = new QPixmap("Images/Background_level_1.jpg");
+    level2_ = new QPixmap("Images/Background_level_2.jpg");
+    level3_ = new QPixmap("Images/Background_level_3.jpg");
     fleet_ = new QPixmap*[NUM_FLEET];
     asteroids_ = new QPixmap*[NUM_ASTEROIDS];
 
@@ -71,7 +73,20 @@ void MainWindow::pause()
 
 void MainWindow::startGame()
 {
+    username_ = nameWin_->getName();
+    level_ = 1;
 
+    // Create the score dock
+    scoreDock_ = new ScoreDoc(username_);
+    QDockWidget* topDock_ = new QDockWidget(tr("Scoreboard"),this);
+    topDock_->setFloating(false);
+    topDock_->setAllowedAreas(Qt::TopDockWidgetArea);
+    topDock_->setWidget(scoreDock_);
+    addDockWidget(Qt::TopDockWidgetArea, topDock_);
+
+    // Create the first level
+    currentWindow_ = new LevelOne(this);
+    setCentralWidget(currentWindow_);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* e)
