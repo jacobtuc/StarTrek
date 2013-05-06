@@ -174,9 +174,13 @@ public:
 private:
     std::vector<Thing*> things_;
     QTimer* timer_;
+    int counter_;
+    int phaserCount;
 
     Enterprise* player_;
     Warbird* warbird_;
+
+
 
 public slots:
     void handleTimer();

@@ -42,9 +42,6 @@ void Warbird::move()
             vX = (xd-pos().x())/targetTime;
             vY = (yd-pos().y())/targetTime;
         }
-
-        std::cout << "Target time: " << targetTime << " vX: " << vX << " vY: " << vY << std::endl;
-
         counter = 0;
     }
     setPos(pos().x()+vX,pos().y()+vY);

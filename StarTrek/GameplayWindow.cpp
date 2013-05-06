@@ -1,4 +1,5 @@
 #include "GameplayWindow.h"
+#include <math.h>
 #include <iostream>
 
 GameplayWindow::GameplayWindow(MainWindow* parent)
@@ -251,6 +252,8 @@ LevelTwo::LevelTwo(MainWindow* parent) : GameplayWindow(parent)
     things_.push_back(warbird_);
 
     // Create and start the timer
+    counter_ = 0;
+    phaserCount = 60;
     timer_ = new QTimer(this);
     timer_->setInterval(50);
     connect(timer_,SIGNAL(timeout()),this,SLOT(handleTimer()));
@@ -260,15 +263,65 @@ LevelTwo::LevelTwo(MainWindow* parent) : GameplayWindow(parent)
 void LevelTwo::newLevel()
 {
     timer_->stop();
+    counter_ = 0;
+    phaserCount = 60;
 }
 
 void LevelTwo::handleTimer()
 {
+    if (counter_ == phaserCount) {
+        // Create the romulan phaser
+        int pVX,pVY,xd,yd,x0,y0;
+        if (player_->pos().x() < warbird_->pos().x())
+        {
+            // The player is to the left of the warbird
+            if (player_->pos().y() < warbird_->pos().y())
+            {
+                // The player is to the left and above the warbird
+                x0 = warbird_->pos().x()-parent_->getRomulan()->width()-1-parent_->getGreenPhaser()->width();
+                y0 = warbird_->pos().y() - parent_->getRomulan()->height() - 1-parent_->getGreenPhaser()->height();
+            } else {
+                // The player is to the left and below the warbird
+                x0 = warbird_->pos().x()-parent_->getRomulan()->width()-1-parent_->getGreenPhaser()->width();
+                y0 = warbird_->pos().y() +1;
+
+            }
+        } else {
+            // The player is to the right of the warbird
+            if (player_->pos().y() < warbird_->pos().y()) {
+                // The player is to the right and above the warbird
+                x0 = warbird_->pos().x()+1;
+                y0 = warbird_->pos().y()-parent_->getRomulan()->height()-1-parent_->getGreenPhaser()->height();
+            } else {
+                // THe player is to the right and below the warbird
+                x0 = warbird_->pos().x()+1;
+                y0 = warbird_->pos().y()+1;
+            }
+        }
+
+        // We want the total velocity to be 15, so we have to calculate based on the velocity constraint
+        xd = player_->pos().x()+(parent_->getEnterprise()->width()/2);
+        yd = player_->pos().y()+(parent_->getEnterprise()->height()/2);
+        int numerator = ((xd-x0)*(xd-x0)) + ((yd - y0)*(yd-y0));
+        int t = static_cast<int>(sqrt(numerator/225));
+        if (t != 0) {
+            pVX = (xd-x0)/t;
+            pVY = (yd-y0)/t;
+            Phaser* aPhaser = new Phaser(parent_->getGreenPhaser(),x0,y0,pVX,pVY,parent_->getLevel2()->width(),parent_->getLevel2()->height(),this);
+            scene_->addItem(aPhaser);
+            things_.push_back(aPhaser);
+        }
+        // Reset phaser count for next time
+        phaserCount = counter_ + 60;
+
+    } // End phaser creation
+
     int tSize = things_.size();
     for (int n = 0; n < tSize; n++)
     {
         things_[n]->move();
     }
+    counter_++;
 }
 
 void LevelTwo::handleCollisions()
