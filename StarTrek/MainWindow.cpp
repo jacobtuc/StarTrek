@@ -6,6 +6,7 @@ MainWindow::MainWindow(QApplication* parent)
     currentWindow_ = NULL;
     level_ = 0;
     score_ = 0;
+    lives_ = 3;
 
     // Start by creating the menus
     // File
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QApplication* parent)
     file_->addAction(newGame);
     pause_ = new QAction("Pause",file_);
     connect(pause_,SIGNAL(triggered()),this,SLOT(pause()));
+    file_->addAction(pause_);
 
     // Now we'll load the pixmaps
     enterprise_ = new QPixmap("Images/Enterprise.png");
@@ -64,7 +66,18 @@ MainWindow::~MainWindow()
 
 void MainWindow::newGame()
 {
+    score_ = 0;
+    level_ = 1;
+    lives_ = 3;
 
+    // Reset the dock
+    scoreDock_->setScore(score_);
+    scoreDock_->setLives(lives_);
+    scoreDock_->setLevel(level_);
+
+    // Create the level
+    currentWindow_ = new LevelOne(this);
+    setCentralWidget(currentWindow_);
 }
 
 void MainWindow::startGame()
@@ -130,6 +143,27 @@ void MainWindow::pause()
         paused_ = true;
         pause_->setText("Restart");
     }
+}
+
+void MainWindow::loseLife()
+{
+    lives_--;
+    if (lives_ < 0)
+        gameOver();
+    scoreDock_->setLives(lives_);
+}
+
+void MainWindow::changeScore(int dS)
+{
+    score_ = score_ + dS;
+    scoreDock_->setScore(score_);
+}
+
+void MainWindow::gameOver()
+{
+    currentWindow_ = NULL;
+    GameOver* gameOver_ = new GameOver(this);
+    setCentralWidget(gameOver_);
 }
 
 /***********************

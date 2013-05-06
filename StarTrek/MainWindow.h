@@ -10,6 +10,7 @@
 #include <QPixmap>
 #include <QString>
 #include <QDockWidget>
+#include <QMessageBox>
 
 #define NUM_FLEET 9
 #define NUM_ASTEROIDS 3
@@ -17,9 +18,11 @@
 #include "GameplayWindow.h"
 #include "NameWidget.h"
 #include "ScoreDoc.h"
+#include "GameOver.h"
 class GameplayWindow;
 class NameWidget;
 class LevelOne;
+class GameOver;
 
 /**This is the main window for the application. It will
 * always be shown and the central widget changed for new stuff.
@@ -70,6 +73,12 @@ public:
     * @param size A reference to the int where you want the size of the array to be stored.
     */
     QPixmap** getAsteroids(int& size);
+    /**Makes the player lose a life. This will call the game over sequence if lives are below zero.*/
+    void loseLife();
+    /**Changes the score by the given amount.
+    * @param dS The amount by which the score should change. Should be negative if the score is decreasing and positive if increasing.
+    */
+    void changeScore(int dS);
 
 private:
     // Menus
@@ -103,6 +112,10 @@ private:
     QString username_;
     int level_;
     int score_;
+    int lives_;
+
+    // Functions
+    void gameOver();
 
 protected:
     /**This is the function that gets called by qt when a key is pressed.

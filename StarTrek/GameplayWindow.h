@@ -14,8 +14,11 @@
 #include "thing.h"
 #include "Enterprise.h"
 #include "Asteroid.h"
+#include "Phaser.h"
 
 class MainWindow;
+class Phaser;
+class Asteroid;
 
 /**This is a virtual class from which all three levels of the game
 * will inherit. It creates the basic properties that all levels must
@@ -51,6 +54,8 @@ public:
     virtual void d() = 0;
     /**Function to be called when the x key is pressed. This should shoot a phaser to the back.*/
     virtual void x() = 0;
+    /**This should remove the thing from the scene and the things vector*/
+    virtual void removeThing(Thing* item) = 0;
 
 protected:
     MainWindow* parent_;
@@ -95,11 +100,25 @@ public:
     void d();
     /**Function to be called when the x key is pressed. This should do nothing in this level.*/
     void x();
+    /**Removes a thing from the vector and from the scene. This is called when an object should no longer exist (obviously).
+    * @param item The thing to be removed */
+    void removeThing(Thing* item);
+    /**Removes two things from teh vector and the scene at once.
+    * @param item1 The first item to be removed
+    * @param item2 The second item to be removed */
+    void removeThings(Thing* item1, Thing* item2);
+    /**This changes the score every time an asteroid passes the player without colliding. It should be called from the asteroid.*/
+    void asteroidCleared();
 
 private:
     QTimer* timer_;
     Enterprise* player_;
     int aCounter;
+
+    // Check for collisions. This should be called from the timer function
+    void handleCollisions();
+    // Resets everything for a new level
+    void newLevel();
 
 public slots:
     void handleTimer();

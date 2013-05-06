@@ -71,11 +71,124 @@ void LevelOne::handleTimer()
         int aSize;
         QPixmap** asteroids_ = parent_->getAsteroids(aSize);
         int anotherDecision = rand() % aSize;
-        Asteroid* myAsteroid = new Asteroid(asteroids_[anotherDecision],parent_->getLevel1()->width(), aCounter+50);
+        Asteroid* myAsteroid = new Asteroid(asteroids_[anotherDecision],parent_->getLevel1()->width(), aCounter+50, parent_->getLevel1()->width(), parent_->getLevel1()->height(),this);
         scene_->addItem(myAsteroid);
         things_.push_back(myAsteroid);
     }
+    handleCollisions();
     aCounter = aCounter + 51;
+}
+
+void LevelOne::handleCollisions()
+{
+    int tSize = things_.size();
+    for (int n = 0; n < tSize; n++) {
+        for (int i = 0; i < tSize; i++) {
+            if (i == n)
+                continue;
+            if (things_[n]->collidesWithItem(things_[i]))
+            {
+                Phaser* pThing = dynamic_cast<Phaser*>(things_[n]);
+                Enterprise* eThing = dynamic_cast<Enterprise*>(things_[n]);
+                Asteroid* aThing = dynamic_cast<Asteroid*>(things_[n]);
+                Phaser* pThing1 = dynamic_cast<Phaser*>(things_[i]);
+                Enterprise* eThing1 = dynamic_cast<Enterprise*>(things_[i]);
+                Asteroid* aThing1 = dynamic_cast<Asteroid*>(things_[i]);
+
+                if (pThing && aThing1) {
+                    // A phaser is hitting an asteroid
+                    removeThings(pThing,aThing1);
+                    tSize = things_.size();
+                    parent_->changeScore(10);
+                    return;
+                }
+                if (pThing1 && aThing) {
+                    // A phaser is hitting an asteroid
+                    removeThings(pThing1,aThing);
+                    tSize = things_.size();
+                    parent_->changeScore(10);
+                    return;
+                }
+                if (aThing && eThing1) {
+                    // The player has hit an asteroid
+                    parent_->loseLife();
+                    newLevel();
+                    return;
+                }
+                if (aThing1 && eThing) {
+                    // The player has hit an asteroid
+                    parent_->loseLife();
+                    newLevel();
+                    return;
+                }
+            } // End if
+        } // End of inner for loop
+    } // End of main for loop
+}
+
+void LevelOne::newLevel()
+{
+    timer_->stop();
+    std::vector<Thing*>::iterator it;
+    for (it = things_.begin(); it != things_.end(); ++it) {
+        scene_->removeItem(*it);
+    }
+    things_.clear();
+
+    // Create the enterprise here
+    player_ = new Enterprise(parent_->getEnterprise(),(parent_->getLevel1()->width()/2) - (parent_->getEnterprise()->width()/2),parent_->getLevel1()->height() - parent_->getEnterprise()->height());
+    scene_->addItem(player_);
+    things_.push_back(player_);
+
+    aCounter = 0;
+    timer_->start();
+}
+
+void LevelOne::asteroidCleared()
+{
+    parent_->changeScore(5);
+}
+
+void LevelOne::removeThings(Thing* item1, Thing* item2)
+{
+    bool removed1 = false;
+    bool removed2 = false;
+    scene_->removeItem(item1);
+    scene_->removeItem(item2);
+    std::vector<Thing*>::iterator it;
+    for (it = things_.begin(); it != things_.end(); ++it) {
+        if (*it == NULL) {
+            break;
+        }
+        if (*it == item1) {
+            if (removed1)
+                continue;
+            things_.erase(it);
+            removed1 = true;
+            continue;
+        }
+        if (*it == item2) {
+            if (removed2)
+                continue;
+            things_.erase(it);
+            removed2 = true;
+            continue;
+        }
+    }
+}
+
+void LevelOne::removeThing(Thing* item)
+{
+    //Remove the thing from the vector
+    std::vector<Thing*>::iterator it;
+    for (it = things_.begin(); it != things_.end(); ++it) {
+        if (*it == NULL)
+            break;
+        if (*it == item) {
+            things_.erase(it);
+            scene_->removeItem(item);
+        }
+    }
 }
 
 void LevelOne::leftArrow()
@@ -99,7 +212,9 @@ void LevelOne::downArrow()
 
 void LevelOne::w()
 {
-    // TODO: Add phaser up code
+    Phaser* myPhaser = new Phaser(parent_->getGreenPhaser(),player_->pos().x() + (parent_->getEnterprise()->width()/2),player_->pos().y() - parent_->getEnterprise()->height() -1,0,-20,parent_->getLevel1()->width(),parent_->getLevel1()->height(),this);
+    scene_->addItem(myPhaser);
+    things_.push_back(myPhaser);
 }
 void LevelOne::a()
 {
