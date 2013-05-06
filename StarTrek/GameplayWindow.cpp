@@ -238,8 +238,15 @@ LEVEL TWO
 ************************************/
 LevelTwo::LevelTwo(MainWindow* parent) : GameplayWindow(parent)
 {
-    // Create the romulan
+    // Create the enterprise
+    player_ = new Enterprise(parent_->getEnterprise(),0,parent_->getLevel2()->height()-parent_->getEnterprise()->height());
+    scene_->addItem(player_);
+    things_.push_back(player_);
 
+    // Create and start the timer
+    timer_ = new QTimer(this);
+    connect(timer_,SIGNAL(timeout()),this,SLOT(handleTimer()));
+    timer_->start();
 }
 
 void LevelTwo::newLevel()
@@ -249,7 +256,11 @@ void LevelTwo::newLevel()
 
 void LevelTwo::handleTimer()
 {
-
+    int tSize = things_.size();
+    for (int n = 0; n < tSize; n++)
+    {
+        things_[n]->move();
+    }
 }
 
 void LevelTwo::handleCollisions()
@@ -274,22 +285,22 @@ void LevelTwo::removeThing(Thing* item)
 
 void LevelTwo::leftArrow()
 {
-
+    player_->setVelocityX(-10);
 }
 
 void LevelTwo::rightArrow()
 {
-
+    player_->setVelocityX(10);
 }
 
 void LevelTwo::upArrow()
 {
-
+    player_->setVelocityY(-10);
 }
 
 void LevelTwo::downArrow()
 {
-
+    player_->setVelocityY(10);
 }
 
 void LevelTwo::w()

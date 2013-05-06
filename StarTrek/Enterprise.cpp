@@ -17,3 +17,13 @@ void Enterprise::move()
     // The ship should only be moving while the key is being held, so we'll set these to zero after every move.
     vX = 0; vY = 0;
 }
+
+void Enterprise::setVelocityX(int nx)
+{
+    vX = nx;
+}
+
+void Enterprise::setVelocityY(int ny)
+{
+    vY = ny;
+}

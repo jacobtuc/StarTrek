@@ -174,6 +174,8 @@ private:
     std::vector<Thing*> things_;
     QTimer* timer_;
 
+    Enterprise* player_;
+
 public slots:
     void handleTimer();
     void handleCollisions();

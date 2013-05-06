@@ -20,6 +20,12 @@ public:
     /**The move function to be called by the timer event.
     * @post This moves the object as per the x and y velocities and then sets both velocities equal to zero so the ship only moves when the arrow keys are being held down.*/
     void move();
+    /**Sets the velocity in the X direction.
+    * @param nx The new X velocity.*/
+    void setVelocityX(int nx);
+    /**Sets the velocity in the Y direction
+    * @param ny The new Y velocity.*/
+    void setVelocityY(int ny);
 };
 
 #endif
