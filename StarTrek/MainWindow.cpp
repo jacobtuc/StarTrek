@@ -98,6 +98,15 @@ void MainWindow::startGame()
     setCentralWidget(currentWindow_);
 }
 
+void MainWindow::secondLevel()
+{
+    level_ = 2;
+    scoreDock_->setLevel(level_);
+
+    currentWindow_ = new LevelTwo(this);
+    setCentralWidget(currentWindow_);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent* e)
 {
     if (currentWindow_ == NULL) return;

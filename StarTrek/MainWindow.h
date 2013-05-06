@@ -23,6 +23,7 @@ class GameplayWindow;
 class NameWidget;
 class LevelOne;
 class GameOver;
+class LevelTwo;
 
 /**This is the main window for the application. It will
 * always be shown and the central widget changed for new stuff.
@@ -79,6 +80,8 @@ public:
     * @param dS The amount by which the score should change. Should be negative if the score is decreasing and positive if increasing.
     */
     void changeScore(int dS);
+    /**Moves the game to the second level. This should be called from the gameplay window of the first level.*/
+    void secondLevel();
 
 private:
     // Menus

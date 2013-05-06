@@ -54,6 +54,8 @@ void LevelOne::handleTimer()
 {
     if (aCounter > 20000) {
         // Insert code to move to level 2
+        parent_->secondLevel();
+        return;
     }
     int tSize = things_.size();
     for (int n = 0; n < tSize; n++)
@@ -212,7 +214,7 @@ void LevelOne::downArrow()
 
 void LevelOne::w()
 {
-    Phaser* myPhaser = new Phaser(parent_->getGreenPhaser(),player_->pos().x() + (parent_->getEnterprise()->width()/2),player_->pos().y() - parent_->getEnterprise()->height() -1,0,-20,parent_->getLevel1()->width(),parent_->getLevel1()->height(),this);
+    Phaser* myPhaser = new Phaser(parent_->getRedPhaser(),player_->pos().x() + (parent_->getEnterprise()->width()/2),player_->pos().y() - parent_->getEnterprise()->height() -1,0,-20,parent_->getLevel1()->width(),parent_->getLevel1()->height(),this);
     scene_->addItem(myPhaser);
     things_.push_back(myPhaser);
 }
@@ -228,3 +230,97 @@ void LevelOne::x()
 {
     // The player can only shoot up in this level.
 }
+
+
+
+/***********************************
+LEVEL TWO
+************************************/
+LevelTwo::LevelTwo(MainWindow* parent) : GameplayWindow(parent)
+{
+    // Create the romulan
+
+}
+
+void LevelTwo::newLevel()
+{
+
+}
+
+void LevelTwo::handleTimer()
+{
+
+}
+
+void LevelTwo::handleCollisions()
+{
+
+}
+
+void LevelTwo::pause()
+{
+    timer_->stop();
+}
+
+void LevelTwo::restart()
+{
+    timer_->start();
+}
+
+void LevelTwo::removeThing(Thing* item)
+{
+
+}
+
+void LevelTwo::leftArrow()
+{
+
+}
+
+void LevelTwo::rightArrow()
+{
+
+}
+
+void LevelTwo::upArrow()
+{
+
+}
+
+void LevelTwo::downArrow()
+{
+
+}
+
+void LevelTwo::w()
+{
+
+}
+
+void LevelTwo::a()
+{
+
+}
+
+void LevelTwo::d()
+{
+
+}
+
+void LevelTwo::x()
+{
+
+}
+
+void LevelTwo::drawBackground(QPainter* p, const QRectF &rect)
+{
+    QRectF newRect = rect;
+    newRect = newRect;
+    QPixmap* landscape_ = parent_->getLevel2();
+    p->drawPixmap(QPoint(0,0),*landscape_);
+    setSceneRect(0,0,landscape_->width(),landscape_->height());
+    setFixedSize(landscape_->width()+10,landscape_->height()+10);
+}
+
+
+

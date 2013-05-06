@@ -124,5 +124,60 @@ public slots:
     void handleTimer();
 };
 
+/**The second level. This will be the battle with the
+* Romulan Warbird. Pretty epic, I know.
+* @author Jacob Tucker */
+class LevelTwo : public GameplayWindow {
+    Q_OBJECT
+public:
+    /**Default constructor.
+    * @param parent The main window of the game where the level should be placed*/
+    LevelTwo(MainWindow* parent);
+    /**Requisite pause function.
+    * @post The timer is stopped to pause the action of the game.*/
+    void pause();
+    /**Requisite restart button
+    * @post The timer is started to restart the action of the game.*/
+    void restart();
+    /**The function called when the left arrow key is pressed.
+    * @post The player moves to the left. It will only move while the key is being held and moves at a constant velocity. */
+    void leftArrow();
+    /**The function called when the right arrow key is pressed.
+    * @post The player moves to the right. It will only move while the key is being held and moves at a constant velocity.*/
+    void rightArrow();
+    /**The function that is called when the up arrow key is pressed.
+    * @post The player moves up. It will only move while the key is being held and moves at a constant velocity.*/
+    void upArrow();
+    /**The function that is called when the down arrow key is pressed.
+    * @post The player moves down. It will only move while the key is being held and moves at a constant velocity.*/
+    void downArrow();
+    /**The function that is called when the w key is pressed.
+    * @post A phaser is launched up at a constant velocity.*/
+    void w();
+    /**The function that is called when the a key is pressed.
+    * @post A phaser is launched to the left at a constant velocity*/
+    void a();
+    /**The function that is called when the "d" key is pressed.
+    * @post A phaser is launched to the right at a constant velocity*/
+    void d();
+    /**The function that is called when the "x" key is pressed.
+    * @post A phaser is launched down at a constant velocity.*/
+    void x();
+    /**Removes the given thing from the scene and the thigns vector.
+    * @param The Thing dirivative to be removed. */
+    void removeThing(Thing* item);
+    /**Overloads the background painter to draw the custom background.
+    * This function should never be called manually.*/
+    void drawBackground(QPainter* p, const QRectF &rect);
+
+private:
+    std::vector<Thing*> things_;
+    QTimer* timer_;
+
+public slots:
+    void handleTimer();
+    void handleCollisions();
+    void newLevel();
+};
 
 #endif
