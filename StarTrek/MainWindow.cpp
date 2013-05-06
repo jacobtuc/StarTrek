@@ -54,6 +54,7 @@ MainWindow::MainWindow(QApplication* parent)
     connect(quit,SIGNAL(triggered()),parent,SLOT(quit()));
     file_->addAction(quit);
     mb->addMenu(file_);
+    paused_ = false;
 }
 
 MainWindow::~MainWindow()
@@ -62,11 +63,6 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::newGame()
-{
-
-}
-
-void MainWindow::pause()
 {
 
 }
@@ -91,7 +87,49 @@ void MainWindow::startGame()
 
 void MainWindow::keyPressEvent(QKeyEvent* e)
 {
+    if (currentWindow_ == NULL) return;
 
+    switch (e->key()) {
+    case Qt::Key_Right:
+        currentWindow_->rightArrow();
+        break;
+    case Qt::Key_Left:
+        currentWindow_->leftArrow();
+        break;
+    case Qt::Key_Up:
+        currentWindow_->upArrow();
+        break;
+    case Qt::Key_Down:
+        currentWindow_->downArrow();
+        break;
+    case Qt::Key_W:
+        currentWindow_->w();
+        break;
+    case Qt::Key_A:
+        currentWindow_->a();
+        break;
+    case Qt::Key_D:
+        currentWindow_->d();
+        break;
+    case Qt::Key_X:
+        currentWindow_->x();
+        break;
+    }
+}
+
+void MainWindow::pause()
+{
+    if (currentWindow_ == NULL) return;
+
+    if (paused_) {
+        currentWindow_->restart();
+        paused_ = false;
+        pause_->setText("Pause");
+    } else {
+        currentWindow_->pause();
+        paused_ = true;
+        pause_->setText("Restart");
+    }
 }
 
 /***********************

@@ -26,3 +26,7 @@ AdminDock.cpp~
 moc_AdminDock.cpp
 moc_ScoreDoc.cpp
 moc_gameplay_window.cpp
+StarTrek/StarTrek
+StarTrek/StarTrek.pro
+StarTrek/moc_GameplayWindow.cpp
+StarTrek/moc_NameWidget.cpp

@@ -78,6 +78,7 @@ private:
 
     // We have to keep track of what is currently being displayed
     GameplayWindow* currentWindow_;
+    bool paused_;
     // We also need to know about the score dock
     ScoreDoc* scoreDock_;
 
