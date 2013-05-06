@@ -136,6 +136,8 @@ void MainWindow::thirdLevel()
     scoreDock_->setLevel(level_);
 
     //TODO: Add code to begin level 3
+    currentWindow_ = new LevelThree(this);
+    setCentralWidget(currentWindow_);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* e)

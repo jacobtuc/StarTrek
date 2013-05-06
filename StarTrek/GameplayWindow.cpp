@@ -543,3 +543,135 @@ void LevelTwo::decreaseEnterpriseHealth()
         newLevel();
 }
 
+
+
+/****************************
+LEVEL 3
+*****************************/
+LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
+{
+    player_ = new Enterprise(parent_->getEnterprise(),0,parent_->getLevel3()->height() - parent_->getEnterprise()->height());
+    scene_->addItem(player_);
+    things_.push_back(player_);
+
+    timer_ = new QTimer(this);
+    timer_->setInterval(50);
+    connect(timer_,SIGNAL(timeout()),this,SLOT(handleTimer()));
+    timer_->start();
+}
+
+void LevelThree::removeThing(Thing* item)
+{
+    //Remove the thing from the vector
+    std::vector<Thing*>::iterator it;
+    for (it = things_.begin(); it != things_.end(); ++it) {
+        if (*it == NULL)
+            break;
+        if (*it == item) {
+            things_.erase(it);
+            scene_->removeItem(item);
+            break;
+        }
+    }
+}
+
+void LevelThree::drawBackground(QPainter* p, const QRectF& rect)
+{
+    QRectF newRect = rect;
+    newRect = newRect;
+    QPixmap* landscape_ = parent_->getLevel3();
+    p->drawPixmap(QPoint(0,0),*landscape_);
+    setSceneRect(0,0,landscape_->width(),landscape_->height());
+    setFixedSize(landscape_->width()+10,landscape_->height()+10);
+}
+
+void LevelThree::handleTimer()
+{
+    int tSize = things_.size();
+    for (int n = 0; n < tSize; n++)
+        things_[n]->move();
+}
+
+void LevelThree::pause()
+{
+    timer_->stop();
+}
+
+void LevelThree::restart()
+{
+    timer_->start();
+}
+
+void LevelThree::leftArrow()
+{
+    player_->setVelocityX(-10);
+}
+
+void LevelThree::rightArrow()
+{
+    player_->setVelocityX(10);
+}
+
+void LevelThree::downArrow()
+{
+    player_->setVelocityY(10);
+}
+
+void LevelThree::upArrow()
+{
+    player_->setVelocityY(-10);
+}
+
+void LevelThree::w()
+{
+    // Create a new phaser above the neterprise and moving forward
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() + (parent_->getEnterprise()->width()/2);
+    y0 = player_->pos().y() - parent_->getRedPhaser()->height()-1;
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,0,-15,mx,my,this);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
+}
+
+void LevelThree::a()
+{
+    // Create a new phaser to the left of the enterprise and moving to the left.
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() - parent_->getRedPhaser()->height()-1;
+    y0 = player_->pos().y() + (parent_->getEnterprise()->height()/2);
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,-15,0,mx,my,this);
+    aPhaser->rotate(-90);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
+}
+
+void LevelThree::d()
+{
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() + parent_->getEnterprise()->width() + parent_->getRedPhaser()->height()+1;
+    y0 = player_->pos().y() + (parent_->getEnterprise()->height()/2);
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,15,0,mx,my,this);
+    aPhaser->rotate(90);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
+}
+
+void LevelThree::x()
+{
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() + (parent_->getEnterprise()->width()/2);
+    y0 = player_->pos().y() + parent_->getEnterprise()->height()+1;
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,0,15,mx,my,this);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
+}
+
+

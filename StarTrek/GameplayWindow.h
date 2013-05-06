@@ -192,4 +192,70 @@ public slots:
     void newLevel();
 };
 
+/**The gameplay window for the third level. This level
+* is the battle with the borg along with the rest of the
+* fleet.
+* @author Jacob Tucker*/
+class LevelThree : public GameplayWindow {
+    Q_OBJECT
+public:
+    /**Default Constructor
+    * @param parent The main window of the game on which the level is placed.*/
+    LevelThree(MainWindow* parent);
+    /**Requisite pause funtion.
+    * @post The timer is stopped to pause gameplay.*/
+    void pause();
+    /**Requisite restart function.
+    * @post The timer is restarted to begin gameplay from the location where it was puased.*/
+    void restart();
+    /**The function that is called when the left arrow is pressed.
+    * It moves the player to the left at a constant velocity. The
+    * player will only move while the key is being held.*/
+    void leftArrow();
+    /**The function that is called when the right arrow is pressed.
+    * It moves the player to the right at a constant velocity.
+    * The player will only move while the key is beinng held.*/
+    void rightArrow();
+    /**The function that is called when the up arrow is pressed.
+    * It moves the player up at a constant velocity. The player
+    * will only move while the key is being held.*/
+    void upArrow();
+    /**The function that is called when the down arrow is pressed.
+    * It moves the player down at a constant velocity. The player
+    * will only move while the key is bieng held.*/
+    void downArrow();
+    /**The function that is called when the "w" key is pressed.
+    * It fires a phaser to the front of the player traveling up.*/
+    void w();
+    /**The function that is called when the "a" key is pressed.
+    * It fires a phaser to the left of the player traveling left.*/
+    void a();
+    /**The function that is called when the "d" key is pressed.
+    * It fires a phaser to the right of the player traveling right.*/
+    void d();
+    /**The function that is called when the "x" key is pressed.
+    * It fires a phaser behind the player traveling down.*/
+    void x();
+    /**The requisite remove thing function. It removes the given
+    * thing from the list of things and from the scene. Qt deallocates
+    * the memory for us, so the thing is, for all intents and purposes,
+    * gone.
+    * @param item A pointer to the Thing to be removed.
+    * @see Thing*/
+    void removeThing(Thing* item);
+    /**Overloads QGraphicsView's drawBackground function to
+    * draw the background provided by the main window class.
+    * This function should never be called manually. It will
+    * automatically be called when the level is created.*/
+    void drawBackground(QPainter* p, const QRectF& rect);
+
+private:
+    std::vector<Thing*> things_;
+    QTimer* timer_;
+    Enterprise* player_;
+
+public slots:
+    void handleTimer();
+};
+
 #endif
