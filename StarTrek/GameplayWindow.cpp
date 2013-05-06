@@ -190,6 +190,7 @@ void LevelOne::removeThing(Thing* item)
         if (*it == item) {
             things_.erase(it);
             scene_->removeItem(item);
+            break;
         }
     }
 }
@@ -239,6 +240,9 @@ LEVEL TWO
 ************************************/
 LevelTwo::LevelTwo(MainWindow* parent) : GameplayWindow(parent)
 {
+    playerHealth = 100;
+    warbirdHealth = 100;
+
     // Create the enterprise
     player_ = new Enterprise(parent_->getEnterprise(),0,parent_->getLevel2()->height()-parent_->getEnterprise()->height());
     scene_->addItem(player_);
@@ -341,7 +345,17 @@ void LevelTwo::restart()
 
 void LevelTwo::removeThing(Thing* item)
 {
-
+    //Remove the thing from the vector
+    std::vector<Thing*>::iterator it;
+    for (it = things_.begin(); it != things_.end(); ++it) {
+        if (*it == NULL)
+            break;
+        if (*it == item) {
+            things_.erase(it);
+            scene_->removeItem(item);
+            break;
+        }
+    }
 }
 
 void LevelTwo::leftArrow()
@@ -366,22 +380,54 @@ void LevelTwo::downArrow()
 
 void LevelTwo::w()
 {
-
+    // Create a new phaser above the neterprise and moving forward
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() + (parent_->getEnterprise()->width()/2);
+    y0 = player_->pos().y() - parent_->getRedPhaser()->height()-1;
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,0,-15,mx,my,this);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
 }
 
 void LevelTwo::a()
 {
-
+    // Create a new phaser to the left of the enterprise and moving to the left.
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() - parent_->getRedPhaser()->height()-1;
+    y0 = player_->pos().y() + (parent_->getEnterprise()->height()/2);
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,-15,0,mx,my,this);
+    aPhaser->rotate(-90);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
 }
 
 void LevelTwo::d()
 {
-
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() + parent_->getEnterprise()->width() + parent_->getRedPhaser()->height()+1;
+    y0 = player_->pos().y() + (parent_->getEnterprise()->height()/2);
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,15,0,mx,my,this);
+    aPhaser->rotate(90);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
 }
 
 void LevelTwo::x()
 {
-
+    int x0,y0,mx,my;
+    x0 = player_->pos().x() + (parent_->getEnterprise()->width()/2);
+    y0 = player_->pos().y() + parent_->getEnterprise()->height()+1;
+    mx = parent_->getLevel2()->width();
+    my = parent_->getLevel2()->height();
+    Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,0,15,mx,my,this);
+    scene_->addItem(aPhaser);
+    things_.push_back(aPhaser);
 }
 
 void LevelTwo::drawBackground(QPainter* p, const QRectF &rect)

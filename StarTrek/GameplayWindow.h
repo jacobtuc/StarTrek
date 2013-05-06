@@ -180,7 +180,8 @@ private:
     Enterprise* player_;
     Warbird* warbird_;
 
-
+    int playerHealth;
+    int warbirdHealth;
 
 public slots:
     void handleTimer();
