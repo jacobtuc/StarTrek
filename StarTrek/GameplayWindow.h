@@ -183,6 +183,9 @@ private:
     int playerHealth;
     int warbirdHealth;
 
+    void decreaseEnterpriseHealth();
+    void decreaseWarbirdHealth();
+
 public slots:
     void handleTimer();
     void handleCollisions();

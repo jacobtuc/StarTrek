@@ -269,6 +269,28 @@ void LevelTwo::newLevel()
     timer_->stop();
     counter_ = 0;
     phaserCount = 60;
+    playerHealth = 100;
+    warbirdHealth = 100;
+
+    // Delete stuff
+    int tSize = things_.size();
+    for (int n = 0; n < tSize; n++)
+        scene_->removeItem(things_[n]);
+    things_.clear();
+
+    // Create the enterprise
+    player_ = new Enterprise(parent_->getEnterprise(),0,parent_->getLevel2()->height()-parent_->getEnterprise()->height());
+    scene_->addItem(player_);
+    things_.push_back(player_);
+
+    // Create the warbird
+    warbird_ = new Warbird(parent_->getRomulan(),0,0,parent_->getLevel2()->width(),parent_->getLevel2()->height());
+    warbird_->rotate(180);
+    warbird_->setPos(parent_->getLevel2()->width() - parent_->getRomulan()->width(),0);
+    scene_->addItem(warbird_);
+    things_.push_back(warbird_);
+
+    timer_->start();
 }
 
 void LevelTwo::handleTimer()
@@ -325,12 +347,76 @@ void LevelTwo::handleTimer()
     {
         things_[n]->move();
     }
+
+    handleCollisions();
+
     counter_++;
 }
 
 void LevelTwo::handleCollisions()
 {
+    int tSize = things_.size();
+    for (int n = 0; n < tSize; n++)
+    {
+        for (int i = 0; i < tSize; i++)
+        {
+            if (i == n)
+                continue;
+            if (things_[n]->collidesWithItem(things_[i]))
+            {
+                Phaser* pThing = dynamic_cast<Phaser*>(things_[n]);
+                Enterprise* eThing = dynamic_cast<Enterprise*>(things_[n]);
+                Warbird* wThing = dynamic_cast<Warbird*>(things_[n]);
+                Phaser* pThing1 = dynamic_cast<Phaser*>(things_[i]);
+                Enterprise* eThing1 = dynamic_cast<Enterprise*>(things_[i]);
+                Warbird* wThing1 = dynamic_cast<Warbird*>(things_[i]);
 
+                if (pThing && eThing1)
+                {
+                    // A phaser has hit the enterprise
+                    removeThing(pThing);
+                    decreaseEnterpriseHealth();
+                    return;
+                }
+                if (eThing && pThing1)
+                {
+                    //A phaser has hit the enterprise
+                    removeThing(pThing1);
+                    decreaseEnterpriseHealth();
+                    return;
+                }
+                if (pThing && wThing1)
+                {
+                    //A phaser has hit the warbird
+                    removeThing(pThing);
+                    decreaseWarbirdHealth();
+                    return;
+                }
+                if (wThing && pThing1)
+                {
+                    //A phaser has hit the warbird
+                    removeThing(pThing1);
+                    decreaseWarbirdHealth();
+                    return;
+                }
+                if (wThing && eThing1)
+                {
+                    //The enterprise has hit the warbird
+                    parent_->loseLife();
+                    newLevel();
+                    return;
+                }
+                if (eThing && wThing1)
+                {
+                    //The enterprise has hit the warbird
+                    parent_->loseLife();
+                    newLevel();
+                    return;
+                }
+            }
+
+        }// End inner for loop
+    }//End main for loop
 }
 
 void LevelTwo::pause()
@@ -440,5 +526,20 @@ void LevelTwo::drawBackground(QPainter* p, const QRectF &rect)
     setFixedSize(landscape_->width()+10,landscape_->height()+10);
 }
 
+void LevelTwo::decreaseWarbirdHealth()
+{
+    warbirdHealth = warbirdHealth - 20;
 
+    if (warbirdHealth <= 0) {
+        parent_->thirdLevel();
+    }
+}
+
+void LevelTwo::decreaseEnterpriseHealth()
+{
+    playerHealth = playerHealth - 20;
+
+    if (playerHealth <= 0)
+        newLevel();
+}
 
