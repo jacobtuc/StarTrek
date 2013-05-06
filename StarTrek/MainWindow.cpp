@@ -4,6 +4,7 @@ MainWindow::MainWindow(QApplication* parent)
 {
     // The current window should be null because there isn't a level yet
     currentWindow_ = NULL;
+    scoreDock_ = NULL;
     level_ = 0;
     score_ = 0;
     lives_ = 3;
@@ -18,6 +19,18 @@ MainWindow::MainWindow(QApplication* parent)
     pause_ = new QAction("Pause",file_);
     connect(pause_,SIGNAL(triggered()),this,SLOT(pause()));
     file_->addAction(pause_);
+
+    // Grading
+    QMenu* grading_ = new QMenu("Grading");
+    QAction* skipLevel1 = new QAction("Jump To Level 1",grading_);
+    connect(skipLevel1,SIGNAL(triggered()),this,SLOT(newGame()));
+    grading_->addAction(skipLevel1);
+    QAction* skipLevel2 = new QAction("Jump To Level 2", grading_);
+    connect(skipLevel2,SIGNAL(triggered()),this,SLOT(secondLevel()));
+    grading_->addAction(skipLevel2);
+    QAction* skipLevel3 = new QAction("Jump To Level 3", grading_);
+    connect(skipLevel3,SIGNAL(triggered()),this,SLOT(thirdLevel()));
+    grading_->addAction(skipLevel3);
 
     // Now we'll load the pixmaps
     enterprise_ = new QPixmap("Images/Enterprise.png");
@@ -56,6 +69,8 @@ MainWindow::MainWindow(QApplication* parent)
     connect(quit,SIGNAL(triggered()),parent,SLOT(quit()));
     file_->addAction(quit);
     mb->addMenu(file_);
+    // The grading menu should come after the file menu.
+    mb->addMenu(grading_);
     paused_ = false;
 }
 
@@ -94,17 +109,33 @@ void MainWindow::startGame()
     addDockWidget(Qt::TopDockWidgetArea, topDock_);
 
     // Create the first level
+
     currentWindow_ = new LevelOne(this);
     setCentralWidget(currentWindow_);
 }
 
 void MainWindow::secondLevel()
 {
+    if (scoreDock_ == NULL) {
+        startGame();
+    }
     level_ = 2;
     scoreDock_->setLevel(level_);
 
     currentWindow_ = new LevelTwo(this);
     setCentralWidget(currentWindow_);
+}
+
+void MainWindow::thirdLevel()
+{
+    if (scoreDock_ == NULL) {
+        startGame();
+    }
+
+    level_ = 3;
+    scoreDock_->setLevel(level_);
+
+    //TODO: Add code to begin level 3
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* e)

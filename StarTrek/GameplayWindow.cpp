@@ -243,15 +243,23 @@ LevelTwo::LevelTwo(MainWindow* parent) : GameplayWindow(parent)
     scene_->addItem(player_);
     things_.push_back(player_);
 
+    // Create the warbird
+    warbird_ = new Warbird(parent_->getRomulan(),0,0,parent_->getLevel2()->width(),parent_->getLevel2()->height());
+    warbird_->rotate(180);
+    warbird_->setPos(parent_->getLevel2()->width() - parent_->getRomulan()->width(),0);
+    scene_->addItem(warbird_);
+    things_.push_back(warbird_);
+
     // Create and start the timer
     timer_ = new QTimer(this);
+    timer_->setInterval(50);
     connect(timer_,SIGNAL(timeout()),this,SLOT(handleTimer()));
     timer_->start();
 }
 
 void LevelTwo::newLevel()
 {
-
+    timer_->stop();
 }
 
 void LevelTwo::handleTimer()

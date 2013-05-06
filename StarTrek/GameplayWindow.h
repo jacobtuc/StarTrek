@@ -15,6 +15,7 @@
 #include "Enterprise.h"
 #include "Asteroid.h"
 #include "Phaser.h"
+#include "Warbird.h"
 
 class MainWindow;
 class Phaser;
@@ -175,6 +176,7 @@ private:
     QTimer* timer_;
 
     Enterprise* player_;
+    Warbird* warbird_;
 
 public slots:
     void handleTimer();

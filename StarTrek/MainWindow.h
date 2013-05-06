@@ -80,8 +80,7 @@ public:
     * @param dS The amount by which the score should change. Should be negative if the score is decreasing and positive if increasing.
     */
     void changeScore(int dS);
-    /**Moves the game to the second level. This should be called from the gameplay window of the first level.*/
-    void secondLevel();
+
 
 private:
     // Menus
@@ -136,6 +135,10 @@ public slots:
     * @see NameWidget
     */
     void startGame();
+    /**Moves the game to the second level. This should be called from the gameplay window of the first level.*/
+    void secondLevel();
+    /**Moves the game to the third leve. This should be called from the gameplay window of the second level.*/
+    void thirdLevel();
 };
 
 #endif
