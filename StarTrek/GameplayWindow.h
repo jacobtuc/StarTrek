@@ -13,6 +13,7 @@
 
 #include "thing.h"
 #include "Enterprise.h"
+#include "Asteroid.h"
 
 class MainWindow;
 
@@ -98,6 +99,7 @@ public:
 private:
     QTimer* timer_;
     Enterprise* player_;
+    int aCounter;
 
 public slots:
     void handleTimer();

@@ -1,4 +1,5 @@
 #include "GameplayWindow.h"
+#include <iostream>
 
 GameplayWindow::GameplayWindow(MainWindow* parent)
 {
@@ -22,6 +23,7 @@ LevelOne::LevelOne(MainWindow* parent) : GameplayWindow(parent)
     scene_->addItem(player_);
     things_.push_back(player_);
 
+    aCounter = 0;
     timer_ = new QTimer(this);
     timer_->setInterval(50);
     connect(timer_, SIGNAL(timeout()), this, SLOT(handleTimer()));
@@ -50,9 +52,30 @@ void LevelOne::drawBackground(QPainter *p, const QRectF &rect)
 
 void LevelOne::handleTimer()
 {
+    if (aCounter > 20000) {
+        // Insert code to move to level 2
+    }
     int tSize = things_.size();
     for (int n = 0; n < tSize; n++)
         things_[n]->move();
+
+    // Decide whether to create an asteroid
+    int a = 50-(aCounter/200);
+    if (a < 10)
+        a = 10;
+    int randSeed = 200 + aCounter;
+    srand(randSeed);
+    int decide = rand() % a + 1;
+    if (decide == 1) {
+        // Decide on a picture
+        int aSize;
+        QPixmap** asteroids_ = parent_->getAsteroids(aSize);
+        int anotherDecision = rand() % aSize;
+        Asteroid* myAsteroid = new Asteroid(asteroids_[anotherDecision],parent_->getLevel1()->width(), aCounter+50);
+        scene_->addItem(myAsteroid);
+        things_.push_back(myAsteroid);
+    }
+    aCounter = aCounter + 51;
 }
 
 void LevelOne::leftArrow()
