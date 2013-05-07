@@ -19,12 +19,14 @@
 #include "Borg.h"
 #include "FleetShip.h"
 #include "BorgPhaser.h"
+#include "FedPhaser.h"
 
 class MainWindow;
 class Phaser;
 class Asteroid;
 class BorgPhaser;
 class FleetShip;
+class FedPhaser;
 
 /**This is a virtual class from which all three levels of the game
 * will inherit. It creates the basic properties that all levels must
@@ -248,6 +250,11 @@ public:
     * @param item A pointer to the Thing to be removed.
     * @see Thing*/
     void removeThing(Thing* item);
+    /**This is the special function that should be called for removing
+    * fleet ships from the scene. This is necessary because the fleet
+    * ships are stored in two locations.
+    * @param item A pointer to the thing to be removed.*/
+    void removeFleetShip(Thing* item);
     /**Overloads QGraphicsView's drawBackground function to
     * draw the background provided by the main window class.
     * This function should never be called manually. It will
@@ -260,9 +267,20 @@ public:
 
 private:
     std::vector<Thing*> things_;
+    std::vector<Thing*> borgTargets_;
     QTimer* timer_;
     Enterprise* player_;
     Borg* borg_;
+
+    int counter;
+    int borgNextFire;
+    int createShip;
+
+    void handleCollisions();
+    void newLevel();
+    void decreaseEnterpriseHealth();
+
+    int playerHealth;
 
 public slots:
     void handleTimer();

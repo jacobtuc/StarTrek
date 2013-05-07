@@ -5,6 +5,7 @@
 
 FleetShip::FleetShip(QPixmap* mp, int mx, int my,int seed, LevelThree* parent) : Thing(mp,0,0)
 {
+    health = 100;
     parent_ = parent;
     // Select the position of the ship
     srand(time(NULL)+seed);
@@ -20,6 +21,15 @@ FleetShip::FleetShip(QPixmap* mp, int mx, int my,int seed, LevelThree* parent) :
     vX = 0; vY = 0;
     targetTime = 0;
     phaserCount = 0;
+}
+
+void FleetShip::hit()
+{
+    health = health - 20;
+    if (health <= 0)
+    {
+        parent_->removeFleetShip(this);
+    }
 }
 
 void FleetShip::move()

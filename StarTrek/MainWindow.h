@@ -80,6 +80,10 @@ public:
     * @param dS The amount by which the score should change. Should be negative if the score is decreasing and positive if increasing.
     */
     void changeScore(int dS);
+    /**As the name implies, this wins the game. This should be called
+    * from the third level to signal that the game has been won. The win
+    * screen will be created.*/
+    void winGame();
 
 
 private:

@@ -208,6 +208,11 @@ void MainWindow::gameOver()
     setCentralWidget(gameOver_);
 }
 
+void MainWindow::winGame()
+{
+    // TODO Add win screen here
+}
+
 /***********************
 IMAGE GETTERS
 ************************/

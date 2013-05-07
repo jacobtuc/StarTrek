@@ -21,6 +21,10 @@ public:
     FleetShip(QPixmap* mp, int mx, int my,int seed,LevelThree* parent);
     /**The requisite move function. This will implement the random movement of the ship.*/
     void move();
+    /**Registers a hit to the ship. It will decrease health by 20 points and check to see if the ship
+    * has been destroyed (whether health points are below zero) and call the proper remove function to
+    * destroy itself if it has*/
+    void hit();
 private:
     int counter,phaserCount;
     // Next move is the next time the ship will fire a phaser
@@ -28,6 +32,7 @@ private:
     int maxX,maxY;
     int seed_;
     LevelThree* parent_;
+    int health;
 };
 
 #endif

@@ -550,10 +550,13 @@ LEVEL 3
 *****************************/
 LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
 {
+    playerHealth = 100;
+
     // Create the enterprise
     player_ = new Enterprise(parent_->getEnterprise(),0,parent_->getLevel3()->height() - parent_->getEnterprise()->height());
     scene_->addItem(player_);
     things_.push_back(player_);
+    borgTargets_.push_back(player_);
 
     // Create the borg
     int xb0 = (parent_->getLevel3()->width()/2) - (parent_->getBorg()->width()/2);
@@ -573,8 +576,12 @@ LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
         FleetShip* aShip = new FleetShip(fleet[rand() % fleetSize],parent_->getLevel3()->width(),parent_->getLevel3()->height(),n*9,this);
         scene_->addItem(aShip);
         things_.push_back(aShip);
+        borgTargets_.push_back(aShip);
     }
 
+    counter = 0;
+    borgNextFire = 20;
+    createShip = 0;
     timer_ = new QTimer(this);
     timer_->setInterval(50);
     connect(timer_,SIGNAL(timeout()),this,SLOT(handleTimer()));
@@ -596,6 +603,33 @@ void LevelThree::removeThing(Thing* item)
     }
 }
 
+void LevelThree::removeFleetShip(Thing* item)
+{
+    std::vector<Thing*>::iterator it;
+    for (it = things_.begin(); it != things_.end(); ++it)
+    {
+        if (*it == NULL)
+            break;
+        if (*it == item)
+        {
+            things_.erase(it);
+            scene_->removeItem(item);
+            break;
+        }
+    }
+
+    // Remove from the target list as well
+    for (it = borgTargets_.begin(); it != borgTargets_.end(); ++it)
+    {
+        if (*it == NULL) break;
+        if (*it == item)
+        {
+            borgTargets_.erase(it);
+            break;
+        }
+    }
+}
+
 void LevelThree::drawBackground(QPainter* p, const QRectF& rect)
 {
     QRectF newRect = rect;
@@ -608,9 +642,192 @@ void LevelThree::drawBackground(QPainter* p, const QRectF& rect)
 
 void LevelThree::handleTimer()
 {
+    if (counter == borgNextFire)
+    {
+        // Borg should fire a phaser
+        int bSize = borgTargets_.size();
+        int targ = rand() % bSize;
+
+        int pVX,pVY,xd,yd,x0,y0;
+        Thing* target = borgTargets_[targ];
+        if (target->pos().x() < borg_->pos().x())
+        {
+            // The player is to the left of the warbird
+            if (target->pos().y() < borg_->pos().y())
+            {
+                // The player is to the left and above the warbird
+                x0 = borg_->pos().x()-borg_->getPixmap()->width()-1-parent_->getGreenPhaser()->width();
+                y0 = borg_->pos().y() - borg_->getPixmap()->height() - 1-parent_->getGreenPhaser()->height();
+            } else {
+                // The player is to the left and below the warbird
+                x0 = borg_->pos().x()-borg_->getPixmap()->width()-1-parent_->getGreenPhaser()->width();
+                y0 = borg_->pos().y() +1;
+            }
+        } else {
+            // The player is to the right of the warbird
+            if (target->pos().y() < borg_->pos().y()) {
+                // The player is to the right and above the warbird
+                x0 = borg_->pos().x()+1;
+                y0 = borg_->pos().y()-borg_->getPixmap()->height()-1-parent_->getGreenPhaser()->height();
+            } else {
+                // THe player is to the right and below the warbird
+                x0 = borg_->pos().x()+1;
+                y0 = borg_->pos().y()+1;
+            }
+        }
+
+        // We want the total velocity to be 15, so we have to calculate based on the velocity constraint
+        xd = target->pos().x()+(parent_->getBorg()->width()/2);
+        yd = target->pos().y()+(parent_->getBorg()->height()/2);
+        int numerator = ((xd-x0)*(xd-x0)) + ((yd - y0)*(yd-y0));
+        int t = static_cast<int>(sqrt(numerator/225));
+        if (t != 0) {
+            pVX = (xd-x0)/t;
+            pVY = (yd-y0)/t;
+            BorgPhaser* aPhaser = new BorgPhaser(parent_->getGreenPhaser(),x0,y0,pVX,pVY,parent_->getLevel3()->width(),parent_->getLevel3()->height(),this);
+            scene_->addItem(aPhaser);
+            things_.push_back(aPhaser);
+        }
+
+        // Reset the nextFire number
+        borgNextFire = 2;
+        borgNextFire = borgNextFire + counter + 1;
+    }
+
+    if (counter == createShip)
+    {
+        int fleetSize;
+        QPixmap** fleet = parent_->getFleet(fleetSize);
+
+        srand(time(NULL)+counter);
+        FleetShip* aShip = new FleetShip(fleet[rand() % fleetSize],parent_->getLevel3()->width(),parent_->getLevel3()->height(),counter*3,this);
+        scene_->addItem(aShip);
+        things_.push_back(aShip);
+        borgTargets_.push_back(aShip);
+
+        createShip = rand() % 60;
+        createShip = createShip + counter + 1;
+    }
     int tSize = things_.size();
     for (int n = 0; n < tSize; n++)
         things_[n]->move();
+    counter++;
+    handleCollisions();
+}
+
+void LevelThree::handleCollisions()
+{
+    int tSize = things_.size();
+    for (int n = 0; n < tSize; n++)
+    {
+        for (int i = 0; i < tSize; i++)
+        {
+            if (n == i) // An object will always be colliding with itself
+                continue;
+            if (things_[n]->collidesWithItem(things_[i]))
+            {
+                Enterprise* eThing = dynamic_cast<Enterprise*>(things_[n]);
+                Borg* bThing = dynamic_cast<Borg*>(things_[n]);
+                FedPhaser* fpThing = dynamic_cast<FedPhaser*>(things_[n]);
+                Phaser* pThing = dynamic_cast<Phaser*>(things_[n]);
+                BorgPhaser* bpThing = dynamic_cast<BorgPhaser*>(things_[n]);
+                FleetShip* fThing = dynamic_cast<FleetShip*>(things_[n]);
+
+                Enterprise* eThing1 = dynamic_cast<Enterprise*>(things_[i]);
+                Phaser* pThing1 = dynamic_cast<Phaser*>(things_[i]);
+                BorgPhaser* bpThing1 = dynamic_cast<BorgPhaser*>(things_[i]);
+                FleetShip* fThing1 = dynamic_cast<FleetShip*>(things_[i]);
+                Borg* bThing1 = dynamic_cast<Borg*>(things_[i]);
+                FedPhaser* fpThing1 = dynamic_cast<FedPhaser*>(things_[i]);
+
+                if (eThing && bpThing1)
+                {
+                    // The enterprise is colliding with a borg phaser
+                    decreaseEnterpriseHealth();
+                    removeThing(bpThing1);
+                    handleCollisions();
+                    return;
+                }
+
+                if (eThing1 && bpThing)
+                {
+                    // The enterprise has been hit by a borg phaser
+                    decreaseEnterpriseHealth();
+                    removeThing(bpThing);
+                    handleCollisions();
+                    return;
+                }
+
+                if (eThing && bThing1)
+                {
+                    // The enterprise has collided with the borg ship
+                    parent_->changeScore(100);
+                    parent_->winGame();
+                    handleCollisions();
+                    return;
+                }
+
+                if (eThing1 && bThing)
+                {
+                    // The enterprise has collided with the borg ship
+                    parent_->changeScore(100);
+                    parent_->winGame();
+                    handleCollisions();
+                    return;
+                }
+
+                if (bThing && fpThing1)
+                {
+                    //A non player member of the fleet has hit the borg
+                    removeThing(fpThing1);
+                    handleCollisions();
+                    return;
+                }
+                if (bThing1 && fpThing)
+                {
+                    //A non player member of the fleet has hit the borg
+                    removeThing(fpThing);
+                    handleCollisions();
+                    return;
+                }
+
+                if (bThing && pThing1)
+                {
+                    // The player has hit the borg with a phaser
+                    parent_->changeScore(10);
+                    removeThing(pThing1);
+                    handleCollisions();
+                    return;
+                }
+
+                if (bThing1 && pThing)
+                {
+                    // The player has hit the borg with a phaser
+                    parent_->changeScore(10);
+                    removeThing(pThing);
+                    handleCollisions();
+                    return;
+                }
+
+                if (bpThing && fThing1)
+                {
+                    // The borg has hit a member of the fleet with a phaser
+                    fThing1->hit();
+                    removeThing(bpThing);
+                    handleCollisions();
+                    return;
+                }
+                if (bpThing1 && fThing)
+                {
+                    // The borg has hit a member of the fleet with a phaser
+                    fThing->hit();
+                    removeThing(bpThing1);
+                    handleCollisions();
+                    return;
+                }
+            }//End does collide if
+        }//End inner-for loop
+    }//End main for loop
 }
 
 void LevelThree::firePhaser(Thing* origin)
@@ -651,7 +868,7 @@ void LevelThree::firePhaser(Thing* origin)
     if (t != 0) {
         pVX = (xd-x0)/t;
         pVY = (yd-y0)/t;
-        Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,pVX,pVY,parent_->getLevel3()->width(),parent_->getLevel3()->height(),this);
+        FedPhaser* aPhaser = new FedPhaser(parent_->getRedPhaser(),x0,y0,pVX,pVY,parent_->getLevel3()->width(),parent_->getLevel3()->height(),this);
         scene_->addItem(aPhaser);
         things_.push_back(aPhaser);
     }
@@ -665,6 +882,19 @@ void LevelThree::pause()
 void LevelThree::restart()
 {
     timer_->start();
+}
+
+void LevelThree::newLevel()
+{
+    player_->setPos(0,parent_->getLevel3()->height()-parent_->getEnterprise()->height());
+    parent_->loseLife();
+}
+void LevelThree::decreaseEnterpriseHealth()
+{
+    playerHealth = playerHealth - 20;
+
+    if (playerHealth <= 0)
+        newLevel();
 }
 
 void LevelThree::leftArrow()
