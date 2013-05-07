@@ -17,10 +17,14 @@
 #include "Phaser.h"
 #include "Warbird.h"
 #include "Borg.h"
+#include "FleetShip.h"
+#include "BorgPhaser.h"
 
 class MainWindow;
 class Phaser;
 class Asteroid;
+class BorgPhaser;
+class FleetShip;
 
 /**This is a virtual class from which all three levels of the game
 * will inherit. It creates the basic properties that all levels must
@@ -249,11 +253,16 @@ public:
     * This function should never be called manually. It will
     * automatically be called when the level is created.*/
     void drawBackground(QPainter* p, const QRectF& rect);
+    /**Fires a phaser toward the borg ship from the given object.
+    * All directional calculations are taken care of here.
+    * @param origin The ship that is launching the phaser*/
+    void firePhaser(Thing* origin);
 
 private:
     std::vector<Thing*> things_;
     QTimer* timer_;
     Enterprise* player_;
+    Borg* borg_;
 
 public slots:
     void handleTimer();

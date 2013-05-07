@@ -560,11 +560,20 @@ LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
     int yb0 = (parent_->getLevel3()->height()/2) - (parent_->getBorg()->height()/2);
     int mx = parent_->getLevel3()->width();
     int my = parent_->getLevel3()->height();
-    Borg* theBorg = new Borg(parent_->getBorg(),xb0,yb0,mx,my);
-    scene_->addItem(theBorg);
-    things_.push_back(theBorg);
+    borg_ = new Borg(parent_->getBorg(),xb0,yb0,mx,my);
+    scene_->addItem(borg_);
+    things_.push_back(borg_);
 
     // Create the first three ships of the fleet
+    int fleetSize;
+    QPixmap** fleet = parent_->getFleet(fleetSize);
+    for (int n = 0; n < 3; n++) {
+        // Pick the pixmap
+        srand(time(NULL)+n);
+        FleetShip* aShip = new FleetShip(fleet[rand() % fleetSize],parent_->getLevel3()->width(),parent_->getLevel3()->height(),n*9,this);
+        scene_->addItem(aShip);
+        things_.push_back(aShip);
+    }
 
     timer_ = new QTimer(this);
     timer_->setInterval(50);
@@ -602,6 +611,50 @@ void LevelThree::handleTimer()
     int tSize = things_.size();
     for (int n = 0; n < tSize; n++)
         things_[n]->move();
+}
+
+void LevelThree::firePhaser(Thing* origin)
+{
+    // Create the romulan phaser
+    int pVX,pVY,xd,yd,x0,y0;
+    if (borg_->pos().x() < origin->pos().x())
+    {
+        // The player is to the left of the warbird
+        if (borg_->pos().y() < origin->pos().y())
+        {
+            // The player is to the left and above the warbird
+            x0 = origin->pos().x()-origin->getPixmap()->width()-1-parent_->getRedPhaser()->width();
+            y0 = origin->pos().y() - origin->getPixmap()->height() - 1-parent_->getRedPhaser()->height();
+        } else {
+            // The player is to the left and below the warbird
+            x0 = origin->pos().x()-origin->getPixmap()->width()-1-parent_->getRedPhaser()->width();
+            y0 = origin->pos().y() +1;
+        }
+    } else {
+        // The player is to the right of the warbird
+        if (borg_->pos().y() < origin->pos().y()) {
+            // The player is to the right and above the warbird
+            x0 = origin->pos().x()+1;
+            y0 = origin->pos().y()-origin->getPixmap()->height()-1-parent_->getRedPhaser()->height();
+        } else {
+            // THe player is to the right and below the warbird
+            x0 = origin->pos().x()+1;
+            y0 = origin->pos().y()+1;
+        }
+    }
+
+    // We want the total velocity to be 15, so we have to calculate based on the velocity constraint
+    xd = borg_->pos().x()+(parent_->getBorg()->width()/2);
+    yd = borg_->pos().y()+(parent_->getBorg()->height()/2);
+    int numerator = ((xd-x0)*(xd-x0)) + ((yd - y0)*(yd-y0));
+    int t = static_cast<int>(sqrt(numerator/225));
+    if (t != 0) {
+        pVX = (xd-x0)/t;
+        pVY = (yd-y0)/t;
+        Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,pVX,pVY,parent_->getLevel3()->width(),parent_->getLevel3()->height(),this);
+        scene_->addItem(aPhaser);
+        things_.push_back(aPhaser);
+    }
 }
 
 void LevelThree::pause()

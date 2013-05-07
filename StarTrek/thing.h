@@ -25,6 +25,8 @@ class Thing : public QGraphicsPixmapItem {
   int getVelocityX();
   /**Returns the current value of the velocity in the y direction*/
   int getVelocityY();
+  /**Returns a pointer to the pixmap of the Thing*/
+  QPixmap* getPixmap() const;
 
  protected:
   int vX;

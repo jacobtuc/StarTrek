@@ -24,3 +24,8 @@ int Thing::getVelocityY()
 {
   return vY;
 }
+
+QPixmap* Thing::getPixmap() const
+{
+    return myPix;
+}

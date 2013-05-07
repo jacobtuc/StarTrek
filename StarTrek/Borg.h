@@ -1,7 +1,10 @@
+#ifndef BORG_H
+#define BORG_H
+
 #include "thing.h"
 
-/**This class represents the Borg ship. It will move
-* periodically to random locations on the screen.*/
+/**This class represents the Borg ship. It should not move, but
+* be stationary in the center of the screen.*/
 class Borg : public Thing {
 public:
     /**Default constructor.
@@ -19,3 +22,5 @@ private:
     int nextMove,targetTime;
     int maxX,maxY;
 };
+
+#endif
