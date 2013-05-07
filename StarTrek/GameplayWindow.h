@@ -16,6 +16,7 @@
 #include "Asteroid.h"
 #include "Phaser.h"
 #include "Warbird.h"
+#include "Borg.h"
 
 class MainWindow;
 class Phaser;

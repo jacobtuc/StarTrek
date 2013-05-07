@@ -550,9 +550,21 @@ LEVEL 3
 *****************************/
 LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
 {
+    // Create the enterprise
     player_ = new Enterprise(parent_->getEnterprise(),0,parent_->getLevel3()->height() - parent_->getEnterprise()->height());
     scene_->addItem(player_);
     things_.push_back(player_);
+
+    // Create the borg
+    int xb0 = (parent_->getLevel3()->width()/2) - (parent_->getBorg()->width()/2);
+    int yb0 = (parent_->getLevel3()->height()/2) - (parent_->getBorg()->height()/2);
+    int mx = parent_->getLevel3()->width();
+    int my = parent_->getLevel3()->height();
+    Borg* theBorg = new Borg(parent_->getBorg(),xb0,yb0,mx,my);
+    scene_->addItem(theBorg);
+    things_.push_back(theBorg);
+
+    // Create the first three ships of the fleet
 
     timer_ = new QTimer(this);
     timer_->setInterval(50);
@@ -628,8 +640,8 @@ void LevelThree::w()
     int x0,y0,mx,my;
     x0 = player_->pos().x() + (parent_->getEnterprise()->width()/2);
     y0 = player_->pos().y() - parent_->getRedPhaser()->height()-1;
-    mx = parent_->getLevel2()->width();
-    my = parent_->getLevel2()->height();
+    mx = parent_->getLevel3()->width();
+    my = parent_->getLevel3()->height();
     Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,0,-15,mx,my,this);
     scene_->addItem(aPhaser);
     things_.push_back(aPhaser);
@@ -641,8 +653,8 @@ void LevelThree::a()
     int x0,y0,mx,my;
     x0 = player_->pos().x() - parent_->getRedPhaser()->height()-1;
     y0 = player_->pos().y() + (parent_->getEnterprise()->height()/2);
-    mx = parent_->getLevel2()->width();
-    my = parent_->getLevel2()->height();
+    mx = parent_->getLevel3()->width();
+    my = parent_->getLevel3()->height();
     Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,-15,0,mx,my,this);
     aPhaser->rotate(-90);
     scene_->addItem(aPhaser);
@@ -654,8 +666,8 @@ void LevelThree::d()
     int x0,y0,mx,my;
     x0 = player_->pos().x() + parent_->getEnterprise()->width() + parent_->getRedPhaser()->height()+1;
     y0 = player_->pos().y() + (parent_->getEnterprise()->height()/2);
-    mx = parent_->getLevel2()->width();
-    my = parent_->getLevel2()->height();
+    mx = parent_->getLevel3()->width();
+    my = parent_->getLevel3()->height();
     Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,15,0,mx,my,this);
     aPhaser->rotate(90);
     scene_->addItem(aPhaser);
@@ -667,8 +679,8 @@ void LevelThree::x()
     int x0,y0,mx,my;
     x0 = player_->pos().x() + (parent_->getEnterprise()->width()/2);
     y0 = player_->pos().y() + parent_->getEnterprise()->height()+1;
-    mx = parent_->getLevel2()->width();
-    my = parent_->getLevel2()->height();
+    mx = parent_->getLevel3()->width();
+    my = parent_->getLevel3()->height();
     Phaser* aPhaser = new Phaser(parent_->getRedPhaser(),x0,y0,0,15,mx,my,this);
     scene_->addItem(aPhaser);
     things_.push_back(aPhaser);
