@@ -20,11 +20,13 @@
 #include "ScoreDoc.h"
 #include "GameOver.h"
 #include "HighScoresList.h"
+#include "HighScoresWin.h"
 class GameplayWindow;
 class NameWidget;
 class LevelOne;
 class GameOver;
 class LevelTwo;
+class HighScoresWin;
 
 /**This is the main window for the application. It will
 * always be shown and the central widget changed for new stuff.
@@ -145,6 +147,8 @@ public slots:
     void secondLevel();
     /**Moves the game to the third leve. This should be called from the gameplay window of the second level.*/
     void thirdLevel();
+    /**Shows the high scores. This will quit the current game if one is running.*/
+    void highScores();
 };
 
 #endif

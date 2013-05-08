@@ -19,6 +19,9 @@ MainWindow::MainWindow(QApplication* parent)
     pause_ = new QAction("Pause",file_);
     connect(pause_,SIGNAL(triggered()),this,SLOT(pause()));
     file_->addAction(pause_);
+    QAction* hs = new QAction("High Scores",file_);
+    connect(hs,SIGNAL(triggered()),this,SLOT(highScores()));
+    file_->addAction(hs);
 
     // Grading
     QMenu* grading_ = new QMenu("Grading");
@@ -72,6 +75,7 @@ MainWindow::MainWindow(QApplication* parent)
     // The grading menu should come after the file menu.
     mb->addMenu(grading_);
     paused_ = false;
+
 }
 
 MainWindow::~MainWindow()
@@ -94,8 +98,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::newGame()
 {
-    GameOver* go = dynamic_cast<GameOver*>(currentWindow_);
-    if (!go)
+    if (currentWindow_)
     {
         if(scores_.insert(username_.toUtf8().constData(),score_))
         {
@@ -104,6 +107,13 @@ void MainWindow::newGame()
             hs.exec();
             scores_.printFile();
         }
+    }
+
+    if (scoreDock_ == NULL)
+    {
+        nameWin_ = new NameWidget(this);
+        setCentralWidget(nameWin_);
+        return;
     }
     score_ = 0;
     level_ = 1;
@@ -233,10 +243,31 @@ void MainWindow::gameOver()
         hs.setText("CONGRATULATIONS! NEW HIGH SCORE!");
         hs.exec();
         scores_.printFile();
+
+        currentWindow_ = NULL;
+        HighScoresWin* scoresWin = new HighScoresWin(this,&scores_);
+        setCentralWidget(scoresWin);
+    } else {
+        currentWindow_ = NULL;
+        GameOver* gameOver_ = new GameOver(this);
+        setCentralWidget(gameOver_);
     }
-    currentWindow_ = NULL;
-    GameOver* gameOver_ = new GameOver(this);
-    setCentralWidget(gameOver_);
+}
+
+void MainWindow::highScores()
+{
+    if (currentWindow_)
+    {
+        if (scores_.insert(username_.toUtf8().constData(),score_))
+        {
+            QMessageBox hs;
+            hs.setText("CONGRATULATIONS! NEW HIGH SCORE!");
+            hs.exec();
+            scores_.printFile();
+        }
+    }
+    HighScoresWin* scoresWin = new HighScoresWin(this,&scores_);
+    setCentralWidget(scoresWin);
 }
 
 void MainWindow::winGame()

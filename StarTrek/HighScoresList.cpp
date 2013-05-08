@@ -9,7 +9,11 @@ HighScoresList::HighScoresList()
 
 bool HighScoresList::insert(std::string name, int score)
 {
-    std::cout << "Inserting..." << std::endl;
+    if (name.compare("") == 0)
+    {
+        return false;
+    }
+
     if (head_ == NULL) //This is the first item
     {
         head_ = new Item;
@@ -17,24 +21,73 @@ bool HighScoresList::insert(std::string name, int score)
         head_->score_ = score;
         head_->next_ = NULL;
         size_ = 1;
-        std::cout << "Inserted head" << std::endl;
         return true;
     }
 
+    Item* temp = new Item;
+    temp->name_ = name;
+    temp->score_ = score;
+    temp->next_ = NULL;
+
+    Item* last = head_;
+    Item* previous;
+    if (last->score_ <= temp->score_)
+    {
+        temp->next_ = head_;
+        head_ = temp;
+        return true;
+    }
+
+    last = last->next_;
+    previous = head_;
+    bool found = false;
+    while (last != NULL)
+    {
+        if (last->score_ <= temp->score_)
+        {
+            previous->next_ = temp;
+            temp->next_ = last;
+            found = true;
+            break;
+        }
+
+        previous = previous->next_;
+        last = last->next_;
+    }//End while
+
+    bool lastItem = false;
+    if (!found) {
+        previous->next_ = temp;
+        lastItem = true;
+    }
+
+    size_++;
+
+    if (size_ > 10)
+    {
+        removeLastItem();
+        if (lastItem)
+            return false;
+    }
+    return true;
+    /*
+    std::cout << "Moving through list" << std::endl;
     Item* conductor = head_;
     Item* previous = head_;
     while(conductor != NULL)
     {
         if(conductor->score_ >= score)
         {
+            std::cout << "Score: " << conductor->score_ << std::endl;
             if (conductor != head_)
                 previous = previous->next_;
             conductor = conductor->next_;
         } else {
-            previous->next_ = new Item;
-            previous->next_->name_ = name;
-            previous->next_->score_ = score;
-            previous->next_->next_ = conductor;
+            Item* newNode = new Item;
+            newNode->name_ = name;
+            newNode->score_ = score;
+            newNode->next_ = conductor;
+            previous->next_ = newNode;
             if (size_ == 10)
                 removeLastItem();
             else
@@ -43,34 +96,32 @@ bool HighScoresList::insert(std::string name, int score)
         }
     }
 
+    std::cout << "Adding at end of list" << std::endl;
     if (size_ < 10)
     {
-        previous->next_ = new Item;
-        previous = previous->next_;
-        previous->name_ = name;
-        previous->score_ = score;
-        previous->next_ = NULL;
+        Item* newNode = new Item;
+        newNode->name_ = name;
+        newNode->score_ = score;
+        newNode->next_ = NULL;
+        previous->next_ = newNode;
         size_++;
         std::cout << "Inserted " << previous->score_ << std::endl;
         return true;
     }
     std::cout << "Did not insert" << std::endl;
-    return false;
+    return false; */
 }
 
 void HighScoresList::printFile()
 {
-    std::cout << "Printing file" << std::endl;
     std::ofstream myfile("HighScores.txt");
 
     Item* conductor = head_;
     while (conductor != NULL)
     {
-        std::cout << "  Printing " << conductor->name_ << " " << conductor->score_ << std::endl;
         myfile << "\"" << conductor->name_ << "\" " << conductor->score_ << "\n";
         conductor = conductor->next_;
     }
-    std::cout << "File printed" << std::endl;
 }
 
 void HighScoresList::readFile()
@@ -91,7 +142,6 @@ void HighScoresList::readFile()
             int score;
             myfile >> score;
             insert(std::string(nm),score);
-            std::cout << "Name: " << nm << " Score: " << score << std::endl;
         }
     }
 }
@@ -120,6 +170,21 @@ std::string HighScoresList::at(int index, int& score)
 void HighScoresList::removeLastItem()
 {
     Item* conductor = head_;
+    if (conductor == NULL)
+        return;
+    if (conductor->next_ == NULL)
+        return;
+    if (conductor->next_->next_ == NULL)
+        return;
+
+    while (conductor->next_->next_ != NULL)
+        conductor = conductor->next_;
+    Item* temp = conductor->next_;
+    conductor->next_ = NULL;
+    delete temp;
+    size_--;
+    /*
+    Item* conductor = head_;
     Item* previous = head_;
     for (int n = 0; n < size_; n++)
     {
@@ -128,5 +193,5 @@ void HighScoresList::removeLastItem()
         conductor = conductor->next_;
     }
     delete conductor;
-    previous->next_ = NULL;
+    previous->next_ = NULL; */
 }
