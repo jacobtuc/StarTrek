@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <iostream>
 
 FleetShip::FleetShip(QPixmap* mp, int mx, int my,int seed, LevelThree* parent) : Thing(mp,0,0)
 {
@@ -28,6 +29,27 @@ void FleetShip::hit()
     health = health - 20;
     if (health <= 0)
     {
+        //std::cout << "Removing fleet ship" << std::endl;
+        parent_->removeFleetShip(this);
+    }
+}
+
+void FleetShip::torpedoHit()
+{
+    health = health - 50;
+    if (health <= 0)
+    {
+        //std::cout << "Removing fleet ship" << std::endl;
+        parent_->removeFleetShip(this);
+    }
+}
+
+void FleetShip::mineHit()
+{
+    health = health - 75;
+    if (health <= 0)
+    {
+        //std::cout << "Removing fleet ship" << std::endl;
         parent_->removeFleetShip(this);
     }
 }

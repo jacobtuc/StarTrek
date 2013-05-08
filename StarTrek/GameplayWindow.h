@@ -20,6 +20,8 @@
 #include "FleetShip.h"
 #include "BorgPhaser.h"
 #include "FedPhaser.h"
+#include "Torpedo.h"
+#include "Mine.h"
 
 class MainWindow;
 class Phaser;
@@ -275,12 +277,16 @@ private:
     int counter;
     int borgNextFire;
     int createShip;
+    int nextTorpedo;
+    int nextMine;
 
     void handleCollisions();
     void newLevel();
     void decreaseEnterpriseHealth();
+    void decreaseEnterpriseHealth(int dS);
 
     int playerHealth;
+
 
 public slots:
     void handleTimer();

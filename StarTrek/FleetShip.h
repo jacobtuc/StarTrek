@@ -25,6 +25,15 @@ public:
     * has been destroyed (whether health points are below zero) and call the proper remove function to
     * destroy itself if it has*/
     void hit();
+    /**Registers a torpedo hitting the ship. It will decrease health by 50 points
+    * and check to see if the ship has been destroyed (whether health points are below zero)
+    * and call the proper remove function to destroy itself if it has.*/
+    void torpedoHit();
+    /**Registers a mine hitting the ship. It will descrease health by 75 points and check
+    * to see if the ship has been destroyed (whether health points are below zero)
+    * and call the proper remove function to destroy itself if it has.*/
+    void mineHit();
+
 private:
     int counter,phaserCount;
     // Next move is the next time the ship will fire a phaser

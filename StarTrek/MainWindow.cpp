@@ -76,11 +76,35 @@ MainWindow::MainWindow(QApplication* parent)
 
 MainWindow::~MainWindow()
 {
+    LevelOne* lo = dynamic_cast<LevelOne*>(currentWindow_);
+    LevelTwo* lt = dynamic_cast<LevelTwo*>(currentWindow_);
+    LevelThree* lthr = dynamic_cast<LevelThree*>(currentWindow_);
 
+    if (lo || lt || lthr)
+    {
+        if (scores_.insert(username_.toUtf8().constData(),score_))
+        {
+            QMessageBox hs;
+            hs.setText("CONGRATULATIONS! NEW HIGH SCORE!");
+            hs.exec();
+            scores_.printFile();
+        }
+    }
 }
 
 void MainWindow::newGame()
 {
+    GameOver* go = dynamic_cast<GameOver*>(currentWindow_);
+    if (!go)
+    {
+        if(scores_.insert(username_.toUtf8().constData(),score_))
+        {
+            QMessageBox hs;
+            hs.setText("CONGRATULATIONS! NEW HIGH SCORE!");
+            hs.exec();
+            scores_.printFile();
+        }
+    }
     score_ = 0;
     level_ = 1;
     lives_ = 3;
@@ -203,6 +227,13 @@ void MainWindow::changeScore(int dS)
 
 void MainWindow::gameOver()
 {
+    if (scores_.insert(username_.toUtf8().constData(),score_))
+    {
+        QMessageBox hs;
+        hs.setText("CONGRATULATIONS! NEW HIGH SCORE!");
+        hs.exec();
+        scores_.printFile();
+    }
     currentWindow_ = NULL;
     GameOver* gameOver_ = new GameOver(this);
     setCentralWidget(gameOver_);

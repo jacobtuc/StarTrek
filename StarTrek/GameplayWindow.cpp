@@ -581,6 +581,8 @@ LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
 
     counter = 0;
     borgNextFire = 20;
+    nextMine = 40;
+    nextTorpedo = 40;
     createShip = 0;
     timer_ = new QTimer(this);
     timer_->setInterval(50);
@@ -590,21 +592,37 @@ LevelThree::LevelThree(MainWindow* parent) : GameplayWindow(parent)
 
 void LevelThree::removeThing(Thing* item)
 {
+    //std::cout << "removing thing " << item << std::endl;
     //Remove the thing from the vector
     std::vector<Thing*>::iterator it;
     for (it = things_.begin(); it != things_.end(); ++it) {
         if (*it == NULL)
             break;
         if (*it == item) {
+            // Check to see if it is being targeted, and remove those things too
+            int targSize = (*it)->getTargetedBy().size();
+            if (targSize != 0)
+            {
+                //std::cout << "Checking targeted by list" << std::endl;
+                std::vector<Thing*>::iterator itt;
+                for (itt = (*it)->getTargetedBy().begin(); itt != (*it)->getTargetedBy().end(); ++itt) {
+                    //std::cout << "  Removing a thing" << std::endl;
+                    removeThing(*itt);
+                }
+                //std::cout << "  Clearing targeted by list" << std::endl;
+                (*it)->getTargetedBy().clear();
+            }
             things_.erase(it);
             scene_->removeItem(item);
             break;
         }
     }
+    //std::cout << "Removed thing" << std::endl;
 }
 
 void LevelThree::removeFleetShip(Thing* item)
 {
+    //std::cout << "Removing fleet ship" << std::endl;
     std::vector<Thing*>::iterator it;
     for (it = things_.begin(); it != things_.end(); ++it)
     {
@@ -612,7 +630,23 @@ void LevelThree::removeFleetShip(Thing* item)
             break;
         if (*it == item)
         {
+            int targSize = (*it)->getTargetedBy().size();
+            if (targSize != 0) {
+                // Check to see if it is being targeted, and remove those things too
+                //std::cout << "Checking targeted by list" << std::endl;
+                std::vector<Thing*>::iterator itt;
+                for (itt = (*it)->getTargetedBy().begin(); itt != (*it)->getTargetedBy().end(); ++itt) {
+                    //IT will never be a fleet ship, so we can just call the normal remove function.
+                    if (*itt == NULL)
+                        break;
+                    removeThing(*itt);
+                }
+                //std::cout << "clearing targeted by list" << std::endl;
+                (*it)->getTargetedBy().clear();
+            }//End targeted by check
+            //std::cout << "removing from things list" << std::endl;
             things_.erase(it);
+            //std::cout << "removing from scene" << std::endl;
             scene_->removeItem(item);
             break;
         }
@@ -628,6 +662,7 @@ void LevelThree::removeFleetShip(Thing* item)
             break;
         }
     }
+    //std::cout << "Removed fleet ship" << std::endl;
 }
 
 void LevelThree::drawBackground(QPainter* p, const QRectF& rect)
@@ -692,7 +727,7 @@ void LevelThree::handleTimer()
         // Reset the nextFire number
         borgNextFire = 2;
         borgNextFire = borgNextFire + counter + 1;
-    }
+    }// End borg fire
 
     if (counter == createShip)
     {
@@ -707,11 +742,49 @@ void LevelThree::handleTimer()
 
         createShip = rand() % 60;
         createShip = createShip + counter + 1;
-    }
+    } // End create ship
+
+    if (counter == nextTorpedo)
+    {
+        //std::cout << "Creating torpedo" << std::endl;
+        // Select the target
+        int selSize = borgTargets_.size();
+        srand(time(NULL));
+        int target = rand() % selSize;
+        int nx = (parent_->getLevel3()->width()/2) - (borgTargets_[target]->getPixmap()->width()/2);
+        int ny = (parent_->getLevel3()->height()/2) - (borgTargets_[target]->getPixmap()->height()/2);
+        Torpedo* aTorpedo = new Torpedo(parent_->getTorpedo(),nx,ny,borgTargets_[target]);
+        borgTargets_[target]->setTargetedBy(aTorpedo);
+        scene_->addItem(aTorpedo);
+        things_.push_back(aTorpedo);
+
+        // Reset the timing stuff
+        int nT = rand() % 30 + 1;
+        nextTorpedo = counter + nT;
+        //std::cout << "Torpedo created" << std::endl;
+    } //End torpedo
+
+    if (counter == nextMine)
+    {
+        //std::cout << "Creating mine" << std::endl;
+        Mine* aMine = new Mine(parent_->getMine(),borg_->pos().x(),borg_->pos().y(),borg_->getPixmap()->width(),borg_->getPixmap()->height(),parent_->getLevel3()->width(),parent_->getLevel3()->height());
+        scene_->addItem(aMine);
+        things_.push_back(aMine);
+
+        // Reset the timing stuff
+        int nM = rand() % 30 + 1;
+        nextMine = nM + counter;
+        //std::cout << "Mine created" << std::endl;
+    } //End mine
+    // Moe all the things
     int tSize = things_.size();
     for (int n = 0; n < tSize; n++)
         things_[n]->move();
+
+    // Toggle the timer counter
     counter++;
+
+    // Check collisions
     handleCollisions();
 }
 
@@ -726,12 +799,15 @@ void LevelThree::handleCollisions()
                 continue;
             if (things_[n]->collidesWithItem(things_[i]))
             {
+                //std::cout << "Handling a collision" << std::endl;
                 Enterprise* eThing = dynamic_cast<Enterprise*>(things_[n]);
                 Borg* bThing = dynamic_cast<Borg*>(things_[n]);
                 FedPhaser* fpThing = dynamic_cast<FedPhaser*>(things_[n]);
                 Phaser* pThing = dynamic_cast<Phaser*>(things_[n]);
                 BorgPhaser* bpThing = dynamic_cast<BorgPhaser*>(things_[n]);
                 FleetShip* fThing = dynamic_cast<FleetShip*>(things_[n]);
+                Torpedo* tThing = dynamic_cast<Torpedo*>(things_[n]);
+                Mine* mThing = dynamic_cast<Mine*>(things_[n]);
 
                 Enterprise* eThing1 = dynamic_cast<Enterprise*>(things_[i]);
                 Phaser* pThing1 = dynamic_cast<Phaser*>(things_[i]);
@@ -739,7 +815,10 @@ void LevelThree::handleCollisions()
                 FleetShip* fThing1 = dynamic_cast<FleetShip*>(things_[i]);
                 Borg* bThing1 = dynamic_cast<Borg*>(things_[i]);
                 FedPhaser* fpThing1 = dynamic_cast<FedPhaser*>(things_[i]);
+                Torpedo* tThing1 = dynamic_cast<Torpedo*>(things_[i]);
+                Mine* mThing1 = dynamic_cast<Mine*>(things_[i]);
 
+                //std::cout << "  Checking items" << std::endl;
                 if (eThing && bpThing1)
                 {
                     // The enterprise is colliding with a borg phaser
@@ -748,7 +827,7 @@ void LevelThree::handleCollisions()
                     handleCollisions();
                     return;
                 }
-
+                //std::cout << "Checking eThing1 and bpThing" << std::endl;
                 if (eThing1 && bpThing)
                 {
                     // The enterprise has been hit by a borg phaser
@@ -757,24 +836,30 @@ void LevelThree::handleCollisions()
                     handleCollisions();
                     return;
                 }
-
+                //std::cout << "Checking eThing and bThing1" << std::endl;
                 if (eThing && bThing1)
                 {
                     // The enterprise has collided with the borg ship
                     parent_->changeScore(100);
-                    parent_->winGame();
+                    newLevel();
+                    parent_->loseLife();
                     handleCollisions();
                     return;
                 }
+
+                //std::cout << "checking eThing1 and bThing" << std::endl;
 
                 if (eThing1 && bThing)
                 {
                     // The enterprise has collided with the borg ship
                     parent_->changeScore(100);
-                    parent_->winGame();
+                    newLevel();
+                    parent_->loseLife();
                     handleCollisions();
                     return;
                 }
+
+                //std::cout << "cheking bThing and fpThing1" << std::endl;
 
                 if (bThing && fpThing1)
                 {
@@ -783,6 +868,8 @@ void LevelThree::handleCollisions()
                     handleCollisions();
                     return;
                 }
+
+                //std::cout << "checking bThing1 and fpThing" << std::endl;
                 if (bThing1 && fpThing)
                 {
                     //A non player member of the fleet has hit the borg
@@ -790,6 +877,8 @@ void LevelThree::handleCollisions()
                     handleCollisions();
                     return;
                 }
+
+                //std::cout << "checking bThing and pThing1" << std::endl;
 
                 if (bThing && pThing1)
                 {
@@ -800,6 +889,8 @@ void LevelThree::handleCollisions()
                     return;
                 }
 
+                //std::cout << "checking bThing1 and pThing" << std::endl;
+
                 if (bThing1 && pThing)
                 {
                     // The player has hit the borg with a phaser
@@ -809,6 +900,8 @@ void LevelThree::handleCollisions()
                     return;
                 }
 
+               // std::cout << "checking bpThing and fThing1" << std::endl;
+
                 if (bpThing && fThing1)
                 {
                     // The borg has hit a member of the fleet with a phaser
@@ -817,14 +910,203 @@ void LevelThree::handleCollisions()
                     handleCollisions();
                     return;
                 }
+
+                //std::cout << "checking bpThing1 and fThing" << std::endl;
                 if (bpThing1 && fThing)
                 {
+                    //std::cout << "bpThing1 and fThing" << std::endl;
                     // The borg has hit a member of the fleet with a phaser
                     fThing->hit();
+                    //std::cout << "removing thing bpThing1" << std::endl;
                     removeThing(bpThing1);
+                    //std::cout << "done handling bpThing1 and fThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "End recursive for bpThing1 and fThing." << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking eThing and mThing1" << std::endl;
+                if (eThing && mThing1)
+                {
+                    //std::cout << "Enterprise hit a mine" << std::endl;
+                    // The enterprise has hit a mine
+                    decreaseEnterpriseHealth(75);
+                    removeThing(mThing1);
+                    //std::cout << "Handled ething and mthing1" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from ething and mthing1" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking eThing1 and mThing" << std::endl;
+                if (eThing1 && mThing)
+                {
+                    //std::cout << "Enterprise hit a mine" << std::endl;
+                    // The enterprise has hit a mine
+                    decreaseEnterpriseHealth(75);
+                    removeThing(mThing);
+                    //std::cout << "Handled ething1 and mthing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from ething1 and mthing" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking pThing and mThing1" << std::endl;
+                if (pThing && mThing1)
+                {
+                    //std::cout << "pThing and mThing1" << std::endl;
+                    // The enterprise has shot a mine
+                    parent_->changeScore(15);
+                    removeThing(pThing);
+                    removeThing(mThing1);
+                    //std::cout << "Handled pThing and mThing1" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from pThing and mThing1" << std::endl;
+                    return;
+                }
+
+               // std::cout << "checking pThing1 and mThing" << std::endl;
+                if (pThing1 && mThing)
+                {
+                    //std::cout << "pThing1 and mThing" << std::endl;
+                    // The enterprise has shot a mine
+                    parent_->changeScore(15);
+                    removeThing(pThing1);
+                    removeThing(mThing);
+                    //std::cout << "Handled pThing1 and mThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from pThing1 and mThing" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking fThing and mThing1" << std::endl;
+                if (fThing && mThing1)
+                {
+                    // A fleet ship has hit a mine
+                    fThing->mineHit();
+                    removeThing(mThing1);
                     handleCollisions();
                     return;
                 }
+
+                //std::cout << "checking fThing1 and mThing" << std::endl;
+                if (fThing1 && mThing)
+                {
+                    //std::cout << "fThing1 and mThing" << std::endl;
+                    // A fleet ship has hit a mine
+                    fThing1->mineHit();
+                    removeThing(mThing1);
+                    //std::cout << "Handled fThing1 and mThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from fThing1 and mThing" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking eThing and tThing1" << std::endl;
+                if (eThing && tThing1 && (tThing1->getTarget() == eThing))
+                {
+                    //std::cout << "eThing and tThing1" << std::endl;
+                    // A torpedo has hit the enterprise
+                    decreaseEnterpriseHealth(50);
+                    eThing->removeTargetedBy(tThing1);
+                    removeThing(tThing1);
+                    //std::cout << "Handled eThing and tThing1" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from eThing and tThing1" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking eThing1 and tThing" << std::endl;
+                if (eThing1 && tThing && (tThing->getTarget() == eThing1))
+                {
+                    //std::cout << "eThing1 and tThing" << std::endl;
+                    // A torpedo has hit the enterprise
+                    decreaseEnterpriseHealth(50);
+                    eThing1->removeTargetedBy(tThing);
+                    removeThing(tThing);
+                    //std::cout << "Handled eThing1 and tThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from eThing1 and tThing" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking fpThing and tThing1" << std::endl;
+                if (fpThing && tThing1 && !tThing1->targetsPlayer())
+                {
+                    //std::cout << "fpThing and tThing1" << std::endl;
+                    //A fed phaser has hit a torpedo that is targeting a member of the fleet that is not the player
+                    removeThing(fpThing);
+                    removeThing(tThing1);
+                    //std::cout << "Handled fpThing and tThing1" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from fpThing and tThing1" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking fpThing1 and tThing" << std::endl;
+                if (fpThing1 && tThing && !tThing->targetsPlayer())
+                {
+                    //std::cout << "fpThing1 and tThing" << std::endl;
+                    removeThing(fpThing1);
+                    removeThing(tThing);
+                    //std::cout << "Handled fpThing1 and tThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from fpThing1 and tThing" << std::endl;
+                    return;
+                }
+
+                //std::cout << "checking pThing and tThing1" << std::endl;
+                if (pThing && tThing1)
+                {
+                    //std::cout << "pThing and tThing1" << std::endl;
+                    // The player has hit a torpedo
+                    parent_->changeScore(20);
+                    removeThing(pThing);
+                    removeThing(tThing1);
+                    //std::cout << "Handled pThing and tThing1" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from pThing and tThing1" << std::endl;
+                    return;
+                }
+                //std::cout << "checking pThing1 and tThing" << std::endl;
+                if (pThing1 && tThing)
+                {
+                    //std::cout << "pThing1 and tThing" << std::endl;
+                    parent_->changeScore(20);
+                    removeThing(pThing1);
+                    removeThing(tThing);
+                    //std::cout << "Handled pThing1 and tThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from pThing1 and tThing" << std::endl;
+                    return;
+                }
+                //std::cout << "checking fThing and tThing1" << std::endl;
+                if (fThing && tThing1 && (tThing1->getTarget() == fThing))
+                {
+                    //std::cout << "fThing and tThing1" << std::endl;
+                    fThing->torpedoHit();
+                    //std::cout << "removing targeted by" << std::endl;
+                    fThing->removeTargetedBy(tThing1);
+                    //std::cout << "removing tthing1" << std::endl;
+                    removeThing(tThing1);
+                    //std::cout << "Handled fThing and tThing1" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from fThing and tThing1" << std::endl;
+                    return;
+                }
+                //std::cout << "fThing1 and tThing" << std::endl;
+                if (fThing1 && tThing && (tThing->getTarget() == fThing1))
+                {
+                    //std::cout << "fThing1 and tThing" << std::endl;
+                    fThing1->torpedoHit();
+                    fThing1->removeTargetedBy(tThing1);
+                    removeThing(tThing);
+                    //std::cout << "Handled fThing1 and tThing" << std::endl;
+                    handleCollisions();
+                    //std::cout << "Ended recursive call from fThing1 and tThing" << std::endl;
+                    return;
+                }
+                //std::cout << "End handle collision" << std::endl;
             }//End does collide if
         }//End inner-for loop
     }//End main for loop
@@ -897,6 +1179,13 @@ void LevelThree::decreaseEnterpriseHealth()
         newLevel();
 }
 
+void LevelThree::decreaseEnterpriseHealth(int dS)
+{
+    playerHealth = playerHealth - dS;
+
+    if (playerHealth <= 0)
+        newLevel();
+}
 void LevelThree::leftArrow()
 {
     player_->setVelocityX(-10);

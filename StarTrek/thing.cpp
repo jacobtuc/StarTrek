@@ -29,3 +29,26 @@ QPixmap* Thing::getPixmap() const
 {
     return myPix;
 }
+
+void Thing::setTargetedBy(Thing* targetedBy)
+{
+    targetedBy_.push_back(targetedBy);
+}
+
+std::vector<Thing*>& Thing::getTargetedBy()
+{
+    return targetedBy_;
+}
+
+void Thing::removeTargetedBy(Thing* targetedBy)
+{
+    std::vector<Thing*>::iterator it;
+    for (it = targetedBy_.begin(); it != targetedBy_.end(); ++it) {
+        if (*it == NULL)
+            break;
+        if (*it == targetedBy) {
+            targetedBy_.erase(it);
+            break;
+        }
+    }
+}

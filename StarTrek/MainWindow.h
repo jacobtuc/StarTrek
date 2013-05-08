@@ -19,6 +19,7 @@
 #include "NameWidget.h"
 #include "ScoreDoc.h"
 #include "GameOver.h"
+#include "HighScoresList.h"
 class GameplayWindow;
 class NameWidget;
 class LevelOne;
@@ -119,6 +120,7 @@ private:
     int level_;
     int score_;
     int lives_;
+    HighScoresList scores_;
 
     // Functions
     void gameOver();
