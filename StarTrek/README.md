@@ -24,4 +24,8 @@ echo "doxygen config.txt"
 echo "./StarTrek"
 ```
 ###Grader Testing Notes
+##Skipping Levels
 There is a menu called "Grading" in the menu bar with buttons to allow the grader to skip to any of the levels so all the "things" can be observed without having to beat each level.
+
+##High Scores
+There is a sample high scores list provided with 10 high scores listed. No more than 10 high scores will be stored, so if you beat any of the ones in the file (it's not difficult - most are really low), they will replace the lowest value in the file. The file is called HighScores.txt, but should never be edited manually. If the file is removed, a new file will be created the first time the game is played.
