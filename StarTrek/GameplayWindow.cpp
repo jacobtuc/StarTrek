@@ -389,6 +389,7 @@ void LevelTwo::handleCollisions()
                 {
                     //A phaser has hit the warbird
                     removeThing(pThing);
+                    parent_->changeScore(10);
                     decreaseWarbirdHealth();
                     return;
                 }
@@ -396,6 +397,7 @@ void LevelTwo::handleCollisions()
                 {
                     //A phaser has hit the warbird
                     removeThing(pThing1);
+                    parent_->changeScore(10);
                     decreaseWarbirdHealth();
                     return;
                 }
@@ -928,6 +930,8 @@ void LevelThree::handleCollisions()
                 //std::cout << "checking eThing and mThing1" << std::endl;
                 if (eThing && mThing1)
                 {
+                    if (mThing1->moving())
+                        break;
                     //std::cout << "Enterprise hit a mine" << std::endl;
                     // The enterprise has hit a mine
                     decreaseEnterpriseHealth(75);
@@ -941,6 +945,8 @@ void LevelThree::handleCollisions()
                 //std::cout << "checking eThing1 and mThing" << std::endl;
                 if (eThing1 && mThing)
                 {
+                    if (mThing->moving())
+                        break;
                     //std::cout << "Enterprise hit a mine" << std::endl;
                     // The enterprise has hit a mine
                     decreaseEnterpriseHealth(75);
@@ -954,6 +960,8 @@ void LevelThree::handleCollisions()
                 //std::cout << "checking pThing and mThing1" << std::endl;
                 if (pThing && mThing1)
                 {
+                    if (mThing1->moving())
+                        break;
                     //std::cout << "pThing and mThing1" << std::endl;
                     // The enterprise has shot a mine
                     parent_->changeScore(15);
@@ -968,6 +976,8 @@ void LevelThree::handleCollisions()
                // std::cout << "checking pThing1 and mThing" << std::endl;
                 if (pThing1 && mThing)
                 {
+                    if (mThing->moving())
+                        break;
                     //std::cout << "pThing1 and mThing" << std::endl;
                     // The enterprise has shot a mine
                     parent_->changeScore(15);
@@ -982,6 +992,8 @@ void LevelThree::handleCollisions()
                 //std::cout << "checking fThing and mThing1" << std::endl;
                 if (fThing && mThing1)
                 {
+                    if (mThing1->moving())
+                        break;
                     // A fleet ship has hit a mine
                     fThing->mineHit();
                     removeThing(mThing1);
@@ -992,6 +1004,8 @@ void LevelThree::handleCollisions()
                 //std::cout << "checking fThing1 and mThing" << std::endl;
                 if (fThing1 && mThing)
                 {
+                    if (mThing->moving())
+                        break;
                     //std::cout << "fThing1 and mThing" << std::endl;
                     // A fleet ship has hit a mine
                     fThing1->mineHit();
