@@ -1,6 +1,7 @@
 #include "Mine.h"
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
 
 Mine::Mine(QPixmap* mp, int bx, int by, int bw, int bh, int sw, int sh) : Thing(mp,bx+(bw/2),by+(bh/2))
 {
@@ -27,33 +28,35 @@ Mine::Mine(QPixmap* mp, int bx, int by, int bw, int bh, int sw, int sh) : Thing(
         // Top box
         minY = 0;
         minX = (sw/2)-(bw/2);
-        maxX = sw;
+        maxX = sw-mp->width();
         maxY = (sh/2)-(bh/2);
     } else if (rectSelect == 2)
     {
         // Right box
         minY = (sh/2)-(bh/2);
         minX = (sw/2)+(bw/2);
-        maxX = sw;
-        maxY = sh;
+        maxX = sw-mp->width();
+        maxY = sh-mp->height();
     } else if (rectSelect == 3)
     {
         // Bottom box
         minX = 0;
         minY = (sh/2)+(bh/2);
         maxX = (sw/2)+(bw/2);
-        maxY = sh;
+        maxY = sh-mp->height();
+    } else {
+        maxX = 1000;
+        maxY = 500;
+        minX = 0;
+        minY = 0;
     }
 
     // Select the position within those constraints
     int dx = rand() % maxX + minX;
     int dy = rand() % maxY + minY;
 
-    vX = dx/30;
-    vY = dy/30;
-
-    vX = 0;
-    vY = 0;
+    vX = (dx-pos().x())/30;
+    vY = (dy-pos().y())/30;
 }
 
 void Mine::move()
@@ -62,6 +65,7 @@ void Mine::move()
     {
         vX = 0;
         vY = 0;
+        moving_ = false;
     }
     setPos(pos().x() + vX, pos().y() + vY);
     counter_++;
