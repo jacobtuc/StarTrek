@@ -687,6 +687,30 @@ void LevelThree::handleTimer()
 
         int pVX,pVY,xd,yd,x0,y0;
         Thing* target = borgTargets_[targ];
+
+        xd = target->pos().x();
+        yd = target->pos().y();
+        x0 = (parent_->getLevel3()->width()/2) - (parent_->getGreenPhaser()->width()/2);
+        y0 = (parent_->getLevel3()->height()/2) - (parent_->getGreenPhaser()->height()/2);
+
+        int numerator = ((xd-x0)*(xd-x0)) + ((yd-y0)*(yd-y0));
+        int velMax = 15;
+        int velMaxSq = velMax*velMax;
+        int t = static_cast<int>(sqrt(numerator/velMaxSq));
+
+        if (t == 0)
+        {
+            pVX = 0;
+            pVY = 0;
+        } else {
+            pVX = (xd-x0)/t;
+            pVY = (yd-y0)/t;
+        }
+
+        BorgPhaser* aPhaser = new BorgPhaser(parent_->getGreenPhaser(),x0,y0,pVX,pVY,parent_->getLevel3()->width(),parent_->getLevel3()->height(),this);
+        scene_->addItem(aPhaser);
+        things_.push_back(aPhaser);
+        /*
         if (target->pos().x() < borg_->pos().x())
         {
             // The player is to the left of the warbird
@@ -724,7 +748,7 @@ void LevelThree::handleTimer()
             BorgPhaser* aPhaser = new BorgPhaser(parent_->getGreenPhaser(),x0,y0,pVX,pVY,parent_->getLevel3()->width(),parent_->getLevel3()->height(),this);
             scene_->addItem(aPhaser);
             things_.push_back(aPhaser);
-        }
+        } */
 
         // Reset the nextFire number
         borgNextFire = 2;
