@@ -2,30 +2,25 @@
 ### Student Information
   + Name: Jacob Tucker
   + USC Email: jacobtuc@usc.edu
-  + USC ID: 8578893431 
 
 ### Game Information
   + Game Name: StarTrek
   + Game Description: Follw the adventures of the starship enterprise through three levels of challenges.
+  + Note: Qt libraries must be installed to compile and run this game
   + [Game Design Doc](GameDesignDoc.md)
   + [License](LICENSE)
 
 ### Compile & Run Instructions
-The grader should use the following procedure to compile and run the code:
+Use the following procedure to compile and run the code:
 ```shell
 #Compile Instructions
 echo "qmake -project"
 echo "qmake"
 echo "make"
-#Doxygen Instructions
-echo "doxygen -g config.txt"
-echo "doxygen config.txt"
-#Command to run
 echo "./StarTrek"
+#Doxygen Instructions
+echo "doxygen config.txt"
 ```
-###Grader Testing Notes
+###Testing Notes
 ##Skipping Levels
-There is a menu called "Grading" in the menu bar with buttons to allow the grader to skip to any of the levels so all the "things" can be observed without having to beat each level.
-
-##High Scores
-There is a sample high scores list provided with 10 high scores listed. No more than 10 high scores will be stored, so if you beat any of the ones in the file (it's not difficult - most are really low), they will replace the lowest value in the file. The file is called HighScores.txt, but should never be edited manually. If the file is removed, a new file will be created the first time the game is played.
+There is a menu called "Grading" in the menu bar with buttons to allow the user to skip to any of the levels so the entirety of the game can be observed without having to beat each level.
