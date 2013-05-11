@@ -2,122 +2,153 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QString>
-#include <QApplication>
 #include <QMenu>
 #include <QMenuBar>
-#include <QPixmap>
+#include <QApplication>
 #include <QKeyEvent>
+#include <QAction>
+#include <QPixmap>
+#include <QString>
 #include <QDockWidget>
+#include <QMessageBox>
 
-#include "FirstWindowWidget.h"
-#include "SelectCar.h"
-#include "gameplay_window.h"
+#define NUM_FLEET 9
+#define NUM_ASTEROIDS 3
+
+#include "GameplayWindow.h"
+#include "NameWidget.h"
 #include "ScoreDoc.h"
-#include "AdminDock.h"
-
-#define NUM_CARS 4
-#define NUM_POLICE_CARS 2
-#define NUM_STEERING_WHEELS 2
-
-class AdminDock;
-class FirstWindow;
-class SelectCar;
+#include "GameOver.h"
+#include "HighScoresList.h"
+#include "HighScoresWin.h"
 class GameplayWindow;
+class NameWidget;
+class LevelOne;
+class GameOver;
+class LevelTwo;
+class HighScoresWin;
 
-/**The main window of the application.
-   This will contain all widgets for game play and everything to do with main gameplay. */
+/**This is the main window for the application. It will
+* always be shown and the central widget changed for new stuff.
+* This class is where all of the main gameplay is handled.
+* @author Jacob Tucker
+*/
 class MainWindow : public QMainWindow {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  /**Default constructor
-     @param The QApplication that owns the window. This is so the quit button on the file menu works.
-  */
-  MainWindow(QApplication* parent);
-  /**Default destructor*/
-  ~MainWindow();
-  /**This is to be called when the name has been entered into the first window form. This function retrieves the name, removes the first window widget, and creates the window to select cars.
-     @pre The first window object first_ must be created
-     @post first_ is deleted and the second menu is created and displayed
-  */
-  void selectCar();
-  /**Returns the array of pointers to car images.
-     @param size A reference variable for the integer where you want the size of the array to be stored */
-  QPixmap** getCars(int& size);
-  /**Returns the array of pointers to steering wheel images.
-     @param size A reference variable for the integer where you want the size of the array to be stored.*/
-  QPixmap** getSteeringWheels(int& size);
-  /**Returns the array of pointers to the police car images
-     @param size A reference variable for the integer where you want the size of the array to be stored.*/
-  QPixmap** getPoliceCars(int& size);
-  /**Returns a pointer to the tumbleweed picture.*/
-  QPixmap* getTumbleweed();
-  /**Returns a pointer to the boulder picture.*/
-  QPixmap* getBoulder();
-  /**Returns a pointer to the landscape picture.*/
-  QPixmap* getLandscape();
-  /**Returns the car that the player has selected to use
-     @pre The SelectCar window must have been created and the user must have selected a car.
-  */
-  QPixmap* getPlayersCar();
-  /**This funtion is called from the SelectCar widget to indicate which car should be selected
-     @param car The pixmap of the car to be the user's car. This should be a member of the cars array.
-     @post car will be set as the user's car and the gameplay will begin
-  */
-  void selectCar(QPixmap* car);
-  /**This function updates the player's score in the top dock widget.
-   * @param score The new score to be sent to the top dock widget. Note that this is not a change in score, but is the total score at that point in the game.
-   */
-  void updateScore(int score);
-  /**This function updates the player's number of lives in the top dock widget.
-   * @param lives The new number of lives to be sent to the top dock widget. Note that this is not a change in number of lives, but is the total number of lives at that point in the game.
-   */
-  void updateLives(int lives);
-  /**This sets the admin variables that are false by default. These are to be called from the AdminDock and allow the user to force certain events to happen.*/
-  void toggleAdminTools(bool boulder, bool tumbleweed, bool policeCar, bool computer);
-  /**This updates the check box information. It calls the toggle function in the admin dock which in turn calls the functions to set moving values in the gameplay window.*/
-  void checkCheckBoxes();
+    /**The default constructor.
+    * @param parent The QApplication in which the main window is running. This is used to create the quit button.
+    */
+    MainWindow(QApplication* parent);
+    /**The default destructor. It doesn't do all that much
+    * because Qt takes care of most memory deallocation for me.
+    */
+    ~MainWindow();
+
+    // Image getters
+    /**Returns a pointer to the enterprise pixmap*/
+    QPixmap* getEnterprise();
+    /**Returns a pointer to the pixmap for the Borg Cube*/
+    QPixmap* getBorg();
+    /**Returns a pointer to the pixmap for the Borg's mines*/
+    QPixmap* getMine();
+    /**Returns a pointer to the pixmap for the Borg's torpedo*/
+    QPixmap* getTorpedo();
+    /**Returns a pointer to the pixmap for the Romulan Warbird*/
+    QPixmap* getRomulan();
+    /**Returns a pointer to the pixmap of a green phaser*/
+    QPixmap* getGreenPhaser();
+    /**Returns a pointer to the pixmap of a red phaser*/
+    QPixmap* getRedPhaser();
+    /**Returns a pointer to the pixmap for the background of
+    * the first level*/
+    QPixmap* getLevel1();
+    /**Returns a pointer to the pixmap for the background of
+    * the second level*/
+    QPixmap* getLevel2();
+    /**Returns a pointer to the pixmap for the background of
+    * the third level*/
+    QPixmap* getLevel3();
+    /**Returns the array of pointers to the pixmaps for the fleet
+    * @param size A reference to the int where you want the size of the array to be stored.
+    */
+    QPixmap** getFleet(int& size);
+    /**Returns the array of pointers to the pixmaps for the asteroids
+    * @param size A reference to the int where you want the size of the array to be stored.
+    */
+    QPixmap** getAsteroids(int& size);
+    /**Makes the player lose a life. This will call the game over sequence if lives are below zero.*/
+    void loseLife();
+    /**Changes the score by the given amount.
+    * @param dS The amount by which the score should change. Should be negative if the score is decreasing and positive if increasing.
+    */
+    void changeScore(int dS);
+    /**As the name implies, this wins the game. This should be called
+    * from the third level to signal that the game has been won. The win
+    * screen will be created.*/
+    void winGame();
+
 
 private:
-  FirstWindow* first_;
-  SelectCar* second_;
-  GameplayWindow* gameplay_;
-  QApplication* parent_;
-  ScoreDoc* scoreDock_;
-  QDockWidget* topDock_;
-  QDockWidget* rightDock_;
-  AdminDock* adminDock_;
-  QAction* pause_;
-  bool paused;
-  bool gameplay_running;
-  
-  //Menus
-  QMenu* file_;
-  QMenu* view_;
+    // Menus
+    QMenu* file_;
+    QAction* pause_;
 
-  //User data
-  QString name;
+    // We have to keep track of what is currently being displayed
+    GameplayWindow* currentWindow_;
+    bool paused_;
+    // We also need to know about the score dock
+    ScoreDoc* scoreDock_;
 
-  //Pictures
-  QPixmap* cars_[NUM_CARS];
-  QPixmap* police_cars_[NUM_POLICE_CARS];
-  QPixmap* steering_wheels_[NUM_STEERING_WHEELS];
-  QPixmap* tumbleweed_;
-  QPixmap* boulder_;
-  QPixmap* landscape_;
-  QPixmap* playersCar_;
+    // Pixmaps
+    QPixmap* enterprise_;
+    QPixmap* borg_;
+    QPixmap* mine_;
+    QPixmap* torpedo_;
+    QPixmap* romulan_;
+    QPixmap* greenPhaser_;
+    QPixmap* redPhaser_;
+    QPixmap* level1_;
+    QPixmap* level2_;
+    QPixmap* level3_;
+    QPixmap** fleet_;
+    QPixmap** asteroids_;
 
- protected:
-  void keyPressEvent(QKeyEvent* e);
+    // Name window
+    NameWidget* nameWin_;
+
+    // User data
+    QString username_;
+    int level_;
+    int score_;
+    int lives_;
+    HighScoresList scores_;
+
+    // Functions
+    void gameOver();
+
+protected:
+    /**This is the function that gets called by qt when a key is pressed.
+    * This is where all of the user's controlls are handled.
+    */
+    void keyPressEvent(QKeyEvent* e);
 
 public slots:
-  /**Creates a new game.
-   * @post The game is taken back to the screen to select a car and the program restarts from there.The score and lives are reset as well as the condition of the pieces and the timer.*/
-  void newGame();
-  /**Pauses the game by calling the pase function in the gameplay window.*/
-  void pauseGame();
+    /**Creates a new game.*/
+    void newGame();
+    /**Pauses the game or does nothing if the game hasn't started yet.*/
+    void pause();
+    /**The start game function to be called after the user's name is entered.
+    * This should only be called from NameWidget.
+    * @see NameWidget
+    */
+    void startGame();
+    /**Moves the game to the second level. This should be called from the gameplay window of the first level.*/
+    void secondLevel();
+    /**Moves the game to the third leve. This should be called from the gameplay window of the second level.*/
+    void thirdLevel();
+    /**Shows the high scores. This will quit the current game if one is running.*/
+    void highScores();
 };
 
 #endif

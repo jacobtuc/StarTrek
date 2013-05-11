@@ -6,7 +6,9 @@
 #include <QLabel>
 #include <QString>
 
-/**This is the widget that will be placed in the top docket of the window. It should only be visible after the first window when the user has input their name (as the name is displayed in the widget).*/
+/**This is the widget that will be placed in the top docket of the window. It should only be visible after the first window when the user has input their name (as the name is displayed in the widget).
+* @author Jacob Tucker
+*/
 class ScoreDoc : public QWidget {
   Q_OBJECT
 
@@ -27,13 +29,19 @@ class ScoreDoc : public QWidget {
    * @param name The user's name
    */
   void setName(QString name);
+  /**Changes the level the player is on.
+  * @param level The new level the player has reached
+  */
+  void setLevel(int level);
 
  private:
   QLabel* name_;
   QLabel* score_;
   QLabel* lives_;
+  QLabel* level_;
   QLabel* scoreLabel_;
   QLabel* livesLabel_;
+  QLabel* levelLabel_;
   QBoxLayout* layout_;
 };
 

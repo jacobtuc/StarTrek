@@ -3,6 +3,7 @@
 
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
+#include <vector>
 
 /**Thing is a virtual class that represents any moving pixmap object.*/
 class Thing : public QGraphicsPixmapItem {
@@ -25,11 +26,25 @@ class Thing : public QGraphicsPixmapItem {
   int getVelocityX();
   /**Returns the current value of the velocity in the y direction*/
   int getVelocityY();
+  /**Returns a pointer to the pixmap of the Thing*/
+  QPixmap* getPixmap() const;
+  /**Adds the given thing to the array of things this thing is
+  * being targeted by so they can be removed when the object is deleted.
+  * @param targetedBy The thing that is now targeting this thing.*/
+  void setTargetedBy(Thing* targetedBy);
+  /**Retrieves the vector that stores a list of pointers of what this thing
+  * is being targeted by so they can be deleted along with this thing.*/
+  std::vector<Thing*>& getTargetedBy();
+  /**Removes the given thing from the targeted by list. This should be called
+  * when the object is being destroyed by a phaser.
+  * @param targetedBy The thing to be removed from the list. If it's not in the list, nothing will happen.*/
+  void removeTargetedBy(Thing* targetedBy);
 
  protected:
   int vX;
   int vY;
   QPixmap* myPix;
+  std::vector<Thing*> targetedBy_;
 
 };
 

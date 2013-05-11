@@ -5,10 +5,10 @@
   + USC ID: 8578893431 
 
 ### Game Information
-  + Game Name: Chicken
-  + Game Description: First person to swerve is the chicken
+  + Game Name: StarTrek
+  + Game Description: Follw the adventures of the starship enterprise through three levels of challenges.
   + [Game Design Doc](GameDesignDoc.md)
-
+  + [License](LICENSE)
 
 ### Compile & Run Instructions
 The grader should use the following procedure to compile and run the code:
@@ -21,7 +21,11 @@ echo "make"
 echo "doxygen -g config.txt"
 echo "doxygen config.txt"
 #Command to run
-echo "./game_jacobtuc"
+echo "./StarTrek"
 ```
 ###Grader Testing Notes
-There is a widget built in to force the objects that decide whether to move randomly to move including the boulder, tumbleweed, and police car. There is also an option to force the computer car to swerve. The widget can be accessed by clicking View->Grading Tools in the menu bar of the main window.
+##Skipping Levels
+There is a menu called "Grading" in the menu bar with buttons to allow the grader to skip to any of the levels so all the "things" can be observed without having to beat each level.
+
+##High Scores
+There is a sample high scores list provided with 10 high scores listed. No more than 10 high scores will be stored, so if you beat any of the ones in the file (it's not difficult - most are really low), they will replace the lowest value in the file. The file is called HighScores.txt, but should never be edited manually. If the file is removed, a new file will be created the first time the game is played.
